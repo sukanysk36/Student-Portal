@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Portal</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+
+    <header>
+        <nav class="navbar">
+
+            <button class="logo logo-btn" id="logoBtn" title="Go to Home">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>Student Portal</span>
+            </button>
+
+            <div class="nav-links" id="navLinks">
+
+                <a href="#home">
+                    <i class="fa-solid fa-house"></i>
+                    Home
+                </a>
+
+                <a href="#dashboard">
+                    <i class="fa-solid fa-chart-line"></i>
+                    Dashboard
+                </a>
+
+                <a href="#profile">
+                    <i class="fa-solid fa-user"></i>
+                    Profile
+                </a>
+
+                <a href="#subjects">
+                    <i class="fa-solid fa-book"></i>
+                    Subjects
+                </a>
+
+                <a href="#notes">
+                    <i class="fa-solid fa-note-sticky"></i>
+                    Notes
+                </a>
+
+                <a href="#timetable">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    Timetable
+                </a>
+
+            </div>
+
+            <div class="nav-actions">
+
+                <button
+                    class="icon-btn"
+                    id="searchBtn"
+                    title="Search"
+                    aria-label="Search">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                </button>
+
+                <button
+                    class="icon-btn notification-btn"
+                    id="notificationBtn"
+                    title="Notifications"
+                    aria-label="Notifications">
+
+                    <i class="fa-solid fa-bell"></i>
+
+                    <span
+                        class="notification-count"
+                        id="notificationCount">
+                        3
+                    </span>
+
+                </button>
+
+                <button
+                    class="icon-btn"
+                    id="themeBtn"
+                    title="Change Theme"
+                    aria-label="Change Theme">
+
+                    <i
+                        class="fa-solid fa-moon"
+                        id="themeIcon">
+                    </i>
+
+                </button>
+
+                <button
+                    class="menu-btn"
+                    id="menuBtn"
+                    title="Menu"
+                    aria-label="Menu">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+                <button id="logoutBtn" class="icon-btn" title="Logout" aria-label="Logout">
+                     <i class="fas fa-right-from-bracket"></i>
+                </button>
+            </div>
+
+        </nav>
+    </header>
+
+
+    <!-- ================= SEARCH ================= -->
+
+    <div
+        class="search-box"
+        id="searchBox">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search subjects, notes, profile..."
+        >
+
+        <button
+            id="closeSearchBtn"
+            aria-label="Close Search">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+
+    <!-- ================= NOTIFICATIONS ================= -->
+
+    <div
+        class="notification-panel"
+        id="notificationPanel">
+
+        <div class="notification-header">
+
+            <h3>Notifications</h3>
+
+            <button id="clearNotifications">
+                Clear
+            </button>
+
+        </div>
+
+        <div id="notificationList">
+
+            <button
+                class="notification-item"
+                data-target="tasks">
+
+                <i class="fa-solid fa-book"></i>
+
+                <span>
+                    <strong>Assignment Reminder</strong>
+                    <small>
+                        Database assignment is due tomorrow.
+                    </small>
+                </span>
+
+            </button>
+
+
+            <button
+                class="notification-item"
+                data-target="timetable">
+
+                <i class="fa-solid fa-calendar"></i>
+
+                <span>
+                    <strong>Class Reminder</strong>
+                    <small>
+                        Web Development class at 11:30 AM.
+                    </small>
+                </span>
+
+            </button>
+
+
+            <button
+                class="notification-item"
+                data-target="dashboard">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                <span>
+                    <strong>Progress Update</strong>
+                    <small>
+                        Your study progress is 68%.
+                    </small>
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <main>
+
+        <!-- ================= HOME ================= -->
+
+        <section
+            class="hero"
+            id="home">
+
+            <div class="hero-content">
+
+                <div class="hero-text">
+
+                    <span class="welcome-label">
+                        Welcome Back 👋
+                    </span>
+
+                    <h1>
+                        Learn.
+                        <span>Grow.</span>
+                        Succeed.
+                    </h1>
+
+                    <p>
+                        Manage your academic activities,
+                        subjects, notes, timetable and progress
+                        from one simple dashboard.
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <button
+                            class="primary-btn"
+                            id="exploreBtn">
+
+                            Explore Dashboard
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </button>
+
+                        <button
+                            class="secondary-btn"
+                            id="profileHeroBtn">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            My Profile
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="hero-card">
+
+                    <div class="floating-icon">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+
+                    <h3>
+                        Academic Progress
+                    </h3>
+
+                    <div class="circle-progress">
+
+                        <div>
+                            <strong>68%</strong>
+                            <span>Completed</span>
+                        </div>
+
+                    </div>
+
+                    <p>
+                        Keep learning and reach your goals!
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section
+    class="dashboard section"
+    id="dashboard">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+                OVERVIEW
+            </span>
+
+            <h2>
+                My Dashboard
+            </h2>
+
+        </div>
+
+        <span class="current-status">
+
+            <i class="fa-solid fa-circle"></i>
+
+            Active
+
+        </span>
+
+    </div>
+
+
+    <div class="stats-grid">
+
+        <!-- SUBJECTS -->
+
+        <button
+            class="stat-card clickable-card"
+            data-target="subjects">
+
+            <div class="stat-icon blue">
+                <i class="fa-solid fa-book"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Total Subjects
+                </span>
+
+                <h3 id="dashboardSubjects">
+                    4
+                </h3>
+
+                <small>
+                    <i class="fa-solid fa-arrow-up"></i>
+                    This semester
+                </small>
+
+            </div>
+
+        </button>
+
+
+        <!-- NOTES -->
+
+        <button
+            class="stat-card clickable-card"
+            data-target="notes">
+
+            <div class="stat-icon purple">
+                <i class="fa-solid fa-note-sticky"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Study Notes
+                </span>
+
+                <h3 id="dashboardNotes">
+                    24
+                </h3>
+
+                <small>
+                    <i class="fa-solid fa-file"></i>
+                    Available
+                </small>
+
+            </div>
+
+        </button>
+
+
+        <!-- ATTENDANCE -->
+
+        <button
+            class="stat-card clickable-card"
+            data-target="attendance">
+
+            <div class="stat-icon green">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Attendance
+                </span>
+
+                <h3 id="dashboardAttendance">
+                    0%
+                </h3>
+
+                <small id="dashboardAttendanceStatus">
+                    <i class="fa-solid fa-arrow-up"></i>
+                    Loading...
+                </small>
+
+            </div>
+
+        </button>
+
+
+        <!-- TASKS -->
+
+        <button
+            class="stat-card clickable-card"
+            data-target="tasks">
+
+            <div class="stat-icon orange">
+                <i class="fa-solid fa-list-check"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Pending Tasks
+                </span>
+
+                <h3 id="dashboardTasks">
+                    0
+                </h3>
+
+                <small>
+                    <i class="fa-solid fa-clock"></i>
+                    Need attention
+                </small>
+
+            </div>
+
+        </button>
+
+    </div>
+
+</section>
+            <!-- QUICK ACTIONS -->
+
+            <div class="quick-actions">
+
+                <h3>
+                    Quick Actions
+                </h3>
+
+                <div class="action-grid">
+
+                    <button
+                        class="action-card"
+                        data-target="subjects">
+
+                        <i class="fa-solid fa-book-open"></i>
+
+                        <span>
+                            View Subjects
+                        </span>
+
+                    </button>
+
+                    <button
+                        class="action-card"
+                        data-target="notes">
+
+                        <i class="fa-solid fa-pen-to-square"></i>
+
+                        <span>
+                            Study Notes
+                        </span>
+
+                    </button>
+
+                    <button
+                        class="action-card"
+                        data-target="timetable">
+
+                        <i class="fa-solid fa-calendar-days"></i>
+
+                        <span>
+                            View Timetable
+                        </span>
+
+                    </button>
+
+                    <button
+                        class="action-card"
+                        data-target="profile">
+
+                        <i class="fa-solid fa-user-pen"></i>
+
+                        <span>
+                            Edit Profile
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= PROFILE ================= -->
+
+        <section
+            class="profile section"
+            id="profile">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        ACCOUNT
+                    </span>
+
+                    <h2>
+                        Student Profile
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="profile-card">
+
+                <div class="profile-avatar">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+
+                <div class="profile-info">
+
+                    <h3 id="studentName">
+                        Student Name
+                    </h3>
+
+                    <p>
+                        <i class="fa-solid fa-code"></i>
+
+                        <span id="studentBranch">
+                            Computer Science
+                        </span>
+                    </p>
+
+                    <p>
+                        <i class="fa-solid fa-graduation-cap"></i>
+
+                        <span id="studentYear">
+                            3rd Year
+                        </span>
+                    </p>
+
+                    <p>
+                        <i class="fa-solid fa-building-columns"></i>
+
+                        <span id="studentCollege">
+                            My College
+                        </span>
+                    </p>
+
+                    <p>
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <span id="studentEmail">
+                            student@example.com
+                        </span>
+                    </p>
+
+                </div>
+
+
+                <button type="button" id="editProfileBtn">
+                    <i class="fa-solid fa-pen"></i>
+                    Edit Profile
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= SUBJECTS ================= -->
+
+        <section
+            class="subjects section"
+            id="subjects">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        ACADEMICS
+                    </span>
+
+                    <h2>
+                        My Subjects
+                    </h2>
+
+                </div>
+
+                <span>
+                    4 Subjects
+                </span>
+
+            </div>
+
+
+            <div class="subject-grid">
+
+                <article class="subject-card">
+
+                    <div class="subject-icon blue">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+
+                    <span class="subject-number">
+                        01
+                    </span>
+
+                    <h3>
+                        Data Structures
+                    </h3>
+
+                    <p>
+                        Arrays, linked lists, stacks,
+                        queues, trees and graphs.
+                    </p>
+
+                    <button
+                        class="view-btn subject-btn"
+                        data-subject="Data Structures">
+
+                        View Details
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </article>
+
+
+                <article class="subject-card">
+
+                    <div class="subject-icon purple">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+
+                    <span class="subject-number">
+                        02
+                    </span>
+
+                    <h3>
+                        Database Management
+                    </h3>
+
+                    <p>
+                        SQL, tables, keys, normalization,
+                        joins and transactions.
+                    </p>
+
+                    <button
+                        class="view-btn subject-btn"
+                        data-subject="Database Management">
+
+                        View Details
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </article>
+
+
+                <article class="subject-card">
+
+                    <div class="subject-icon green">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+
+                    <span class="subject-number">
+                        03
+                    </span>
+
+                    <h3>
+                        Web Development
+                    </h3>
+
+                    <p>
+                        HTML, CSS, JavaScript, DOM,
+                        events and responsive design.
+                    </p>
+
+                    <button
+                        class="view-btn subject-btn"
+                        data-subject="Web Development">
+
+                        View Details
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </article>
+
+
+                <article class="subject-card">
+
+                    <div class="subject-icon orange">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+
+                    <span class="subject-number">
+                        04
+                    </span>
+
+                    <h3>
+                        Computer Networks
+                    </h3>
+
+                    <p>
+                        OSI model, TCP/IP, IP addressing,
+                        routing and protocols.
+                    </p>
+
+                    <button
+                        class="view-btn subject-btn"
+                        data-subject="Computer Networks">
+
+                        View Details
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= NOTES ================= -->
+
+        <section
+            class="notes section"
+            id="notes">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        STUDY MATERIAL
+                    </span>
+
+                    <h2>
+                        Study Notes
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="notes-grid">
+
+                <article class="note-card">
+
+                    <i class="fa-solid fa-code note-icon"></i>
+
+                    <h3>
+                        Data Structures Notes
+                    </h3>
+
+                    <p>
+                        Important concepts,
+                        algorithms and examples.
+                    </p>
+
+                    <button
+                        class="view-btn view-notes-btn"
+                        data-note="Data Structures">
+
+                        Read Notes
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </article>
+
+
+                <article class="note-card">
+
+                    <i class="fa-solid fa-database note-icon"></i>
+
+                    <h3>
+                        Database Notes
+                    </h3>
+
+                    <p>
+                        SQL, normalization and
+                        database concepts.
+                    </p>
+
+                    <button
+                        class="view-btn view-notes-btn"
+                        data-note="Database">
+
+                        Read Notes
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </article>
+
+
+                <article class="note-card">
+
+                    <i class="fa-solid fa-globe note-icon"></i>
+
+                    <h3>
+                        Web Development Notes
+                    </h3>
+
+                    <p>
+                        HTML, CSS and JavaScript
+                        study materials.
+                    </p>
+
+                    <button
+                        class="view-btn view-notes-btn"
+                        data-note="Web Development">
+
+                        Read Notes
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= TIMETABLE ================= -->
+
+        <section
+            class="timetable section"
+            id="timetable">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        SCHEDULE
+                    </span>
+
+                    <h2>
+                        Class Timetable
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Day
+                            </th>
+
+                            <th>
+                                9:00 - 10:00
+                            </th>
+
+                            <th>
+                                10:00 - 11:00
+                            </th>
+
+                            <th>
+                                11:30 - 12:30
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+    <tr>
+        <td>Monday</td>
+
+        <td
+            class="timetable-item"
+            data-subject="Data Structures"
+            data-day="Monday"
+            data-time="9:00 AM - 10:00 AM"
+            data-room="Room 101">
+            Data Structures
+        </td>
+
+        <td
+            class="timetable-item"
+            data-subject="Database Management"
+            data-day="Monday"
+            data-time="10:00 AM - 11:00 AM"
+            data-room="Room 102">
+            Database
+        </td>
+
+        <td
+            class="timetable-item"
+            data-subject="Web Development"
+            data-day="Monday"
+            data-time="11:30 AM - 12:30 PM"
+            data-room="Room 103">
+            Web Development
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>Tuesday</td>
+
+        <td
+            class="timetable-item"
+            data-subject="Computer Networks"
+            data-day="Tuesday"
+            data-time="9:00 AM - 10:00 AM"
+            data-room="Room 104">
+            Computer Networks
+        </td>
+
+        <td
+            class="timetable-item"
+            data-subject="Data Structures"
+            data-day="Tuesday"
+            data-time="10:00 AM - 11:00 AM"
+            data-room="Room 101">
+            Data Structures
+        </td>
+
+        <td
+            class="timetable-item"
+            data-subject="Database Management"
+            data-day="Tuesday"
+            data-time="11:30 AM - 12:30 PM"
+            data-room="Room 102">
+            Database
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>Wednesday</td>
+
+        <td
+            class="timetable-item"
+            data-subject="Web Development"
+            data-day="Wednesday"
+            data-time="9:00 AM - 10:00 AM"
+            data-room="Room 103">
+            Web Development
+        </td>
+
+        <td
+            class="timetable-item"
+            data-subject="Computer Networks"
+            data-day="Wednesday"
+            data-time="10:00 AM - 11:00 AM"
+            data-room="Room 104">
+            Computer Networks
+        </td>
+
+        <td
+            class="timetable-item"
+            data-subject="Data Structures"
+            data-day="Wednesday"
+            data-time="11:30 AM - 12:30 PM"
+            data-room="Room 101">
+            Data Structures
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>Thursday</td>
+
+        <td
+            class="timetable-item"
+            data-subject="Database Management"
+            data-day="Thursday"
+            data-time="9:00 AM - 10:00 AM"
+            data-room="Room 102">
+            Database
+        </td>
+
+        <td
+            class="timetable-item"
+            data-subject="Web Development"
+            data-day="Thursday"
+            data-time="10:00 AM - 11:00 AM"
+            data-room="Room 103">
+            Web Development
+        </td>
+
+        <td
+            class="timetable-item"
+            data-subject="Computer Networks"
+            data-day="Thursday"
+            data-time="11:30 AM - 12:30 PM"
+            data-room="Room 104">
+            Computer Networks
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>Friday</td>
+
+        <td
+            class="timetable-item"
+            data-subject="Data Structures"
+            data-day="Friday"
+            data-time="9:00 AM - 10:00 AM"
+            data-room="Room 101">
+            Data Structures
+        </td>
+
+        <td
+            class="timetable-item"
+            data-subject="Database Management"
+            data-day="Friday"
+            data-time="10:00 AM - 11:00 AM"
+            data-room="Room 102">
+            Database
+        </td>
+
+        <td
+            class="timetable-item"
+            data-subject="Web Development"
+            data-day="Friday"
+            data-time="11:30 AM - 12:30 PM"
+            data-room="Room 103">
+            Web Development
+        </td>
+    </tr>
+
+</tbody>
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- TIMETABLE MODAL -->
+<div
+    class="modal"
+    id="timetableModal">
+
+    <div class="modal-content">
+
+        <button
+            class="modal-close"
+            id="closeTimetableModal">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+        <div class="modal-icon">
+            <i class="fa-solid fa-calendar-days"></i>
+        </div>
+
+        <h2 id="timetableModalSubject">
+            Class Details
+        </h2>
+
+        <p id="timetableModalDay">
+            Day
+        </p>
+
+        <div class="detail-row">
+            <strong>Time:</strong>
+            <span id="timetableModalTime">
+                Time
+            </span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Room:</strong>
+            <span id="timetableModalRoom">
+                Room 101
+            </span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Status:</strong>
+            <span id="timetableModalStatus">
+                Scheduled
+            </span>
+        </div>
+
+    </div>
+</div>
+
+
+        <!-- ================= ATTENDANCE ================= -->
+
+        <section
+    class="extra-section section"
+    id="attendance">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+                ACADEMIC RECORD
+            </span>
+
+            <h2>
+                Attendance
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div class="info-grid">
+
+        <!-- Overall Attendance -->
+        <div class="info-card">
+
+            <i class="fa-solid fa-calendar-check"></i>
+
+            <h3>
+                Overall Attendance
+            </h3>
+
+            <strong id="overallAttendance">
+                82%
+            </strong>
+
+            <p id="attendanceStatus">
+                Good standing
+            </p>
+
+        </div>
+
+
+        <!-- Classes Attended -->
+        <div class="info-card">
+
+            <i class="fa-solid fa-circle-check"></i>
+
+            <h3>
+                Classes Attended
+            </h3>
+
+            <strong id="classesAttended">
+                41 / 50
+            </strong>
+
+            <p id="classesMissed">
+                9 classes missed
+            </p>
+
+        </div>
+
+
+        <!-- Minimum Target -->
+        <div class="info-card">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+            <h3>
+                Minimum Target
+            </h3>
+
+            <strong id="minimumTarget">
+                75%
+            </strong>
+
+            <p>
+                Stay above the required level
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+        <!-- ================= TASKS ================= -->
+<section
+    class="extra-section section"
+    id="tasks">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+                WORK TO DO
+            </span>
+
+            <h2>
+                Pending Tasks
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div
+        class="task-list"
+        id="taskList">
+
+        <!-- Tasks from MongoDB will appear here -->
+
+    </div>
+
+</section>
+
+        <!-- ================= CONTACT ================= -->
+
+        <section
+    class="contact section"
+    id="contact">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+                SUPPORT
+            </span>
+
+            <h2>
+                Contact Us
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div class="contact-grid">
+
+        <!-- EMAIL -->
+
+        <div class="contact-card">
+
+            <i class="fa-solid fa-envelope"></i>
+
+            <h3>
+                Email
+            </h3>
+
+            <p>
+                studentportal@example.com
+            </p>
+
+            <a href="mailto:studentportal@example.com">
+                Send Email
+            </a>
+
+        </div>
+
+
+        <!-- PHONE -->
+
+        <div class="contact-card">
+
+            <i class="fa-solid fa-phone"></i>
+
+            <h3>
+                Phone
+            </h3>
+
+            <p>
+                +91 98765 43210
+            </p>
+
+            <a href="tel:+919876543210">
+                Call Support
+            </a>
+
+        </div>
+
+
+        <!-- SUPPORT -->
+
+        <div class="contact-card">
+
+            <i class="fa-solid fa-circle-question"></i>
+
+            <h3>
+                Support Center
+            </h3>
+
+            <p>
+                Need help with the portal?
+            </p>
+
+            <button
+                class="text-btn"
+                id="helpBtn">
+
+                Get Help
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONTACT FORM -->
+
+    <div class="contact-form-container">
+
+        <div class="contact-form-heading">
+
+            <span class="section-label">
+                SEND MESSAGE
+            </span>
+
+            <h3>
+                How can we help you?
+            </h3>
+
+            <p>
+                Fill in the form below and send us your message.
+            </p>
+
+        </div>
+
+
+        <form id="contactForm">
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="contactName">
+                        Your Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="contactName"
+                        placeholder="Enter your name"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="contactEmail">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="contactEmail"
+                        placeholder="Enter your email"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="contactSubject">
+                    Subject
+                </label>
+
+                <input
+                    type="text"
+                    id="contactSubject"
+                    placeholder="Enter message subject"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="contactMessage">
+                    Message
+                </label>
+
+                <textarea
+                    id="contactMessage"
+                    rows="5"
+                    placeholder="Write your message..."
+                    required></textarea>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="primary-btn">
+
+                <i class="fa-solid fa-paper-plane"></i>
+
+                Send Message
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+    <!-- ================= NOTES MODAL ================= -->
+
+    <div
+        class="modal"
+        id="notesModal">
+
+        <div class="modal-content">
+
+            <button
+                class="modal-close"
+                id="closeNotesModal">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+            <div class="modal-icon">
+                <i class="fa-solid fa-note-sticky"></i>
+            </div>
+
+            <h2 id="notesModalTitle">
+                Study Notes
+            </h2>
+
+            <p id="notesModalText">
+                Notes content
+            </p>
+
+            <button
+                class="primary-btn"
+                id="closeNotesBtn">
+
+                Close
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= PROFILE MODAL ================= -->
+
+    <div
+        class="modal"
+        id="profileModal">
+
+        <div class="modal-content">
+
+            <button
+                class="modal-close"
+                id="closeProfileModal">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+            <div class="modal-icon">
+                <i class="fa-solid fa-user-pen"></i>
+            </div>
+
+            <h2>
+                Edit Profile
+            </h2>
+
+            <form id="profileForm">
+
+                <label>
+                    Name
+                    <input
+                        id="profileNameInput"
+                        required>
+                </label>
+
+                <label>
+                    Branch
+                    <input
+                        id="profileBranchInput"
+                        required>
+                </label>
+
+                <label>
+                    Year
+                    <input
+                        id="profileYearInput"
+                        required>
+                </label>
+
+                <label>
+                    College
+                    <input
+                        id="profileCollegeInput"
+                        required>
+                </label>
+
+                <label>
+                    Email
+                    <input
+                        id="profileEmailInput"
+                        type="email"
+                        required>
+                </label>
+
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        id="cancelProfileBtn">
+
+                        Cancel
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="primary-btn">
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= HELP MODAL ================= -->
+
+    <div
+        class="modal"
+        id="helpModal">
+
+        <div class="modal-content">
+
+            <button
+                class="modal-close"
+                id="closeHelpModal">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+            <div class="modal-icon">
+
+                <i class="fa-solid fa-circle-question"></i>
+
+            </div>
+
+            <h2>
+                How can we help?
+            </h2>
+
+            <p>
+                Use the navigation menu to access Dashboard,
+                Profile, Subjects, Notes and Timetable.
+                For support, email
+                studentportal@example.com
+                or call +91 98765 43210.
+            </p>
+
+            <button
+                class="primary-btn"
+                id="closeHelpBtn">
+
+                Close
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= TASK MODAL ================= -->
+
+    <div
+        class="modal"
+        id="taskModal">
+
+        <div class="modal-content">
+
+            <button
+                class="modal-close"
+                id="closeTaskModal">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+            <div class="modal-icon">
+
+                <i class="fa-solid fa-list-check"></i>
+
+            </div>
+
+            <h2 id="taskModalTitle">
+                Task
+            </h2>
+
+            <p id="taskModalText">
+                Task details
+            </p>
+
+            <button
+                class="primary-btn"
+                id="markTaskBtn">
+
+                Mark as Completed
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= TOP BUTTON ================= -->
+
+    <button
+        id="topBtn"
+        title="Back to Top"
+        aria-label="Back to Top">
+
+        <i class="fa-solid fa-arrow-up"></i>
+
+    </button>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <!-- ================= FOOTER ================= -->
+<footer class="footer" id="footer">
+    <div class="footer-container">
+
+        <!-- About -->
+        <div class="footer-column footer-about">
+            <a href="#home" class="footer-logo" id="footerLogoBtn">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>Student Portal</span>
+            </a>
+
+            <p>
+                A simple and modern student portal to manage
+                academics, subjects, notes, timetable and profile.
+            </p>
+
+            <div class="footer-social">
+
+    <a href="https://www.facebook.com/"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Facebook"
+       title="Facebook">
+        <i class="fa-brands fa-facebook-f"></i>
+    </a>
+
+    <a href="https://www.instagram.com/"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Instagram"
+       title="Instagram">
+        <i class="fa-brands fa-instagram"></i>
+    </a>
+
+    <a href="https://www.linkedin.com/"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="LinkedIn"
+       title="LinkedIn">
+        <i class="fa-brands fa-linkedin-in"></i>
+    </a>
+
+    <a href="https://github.com/"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="GitHub"
+       title="GitHub">
+        <i class="fa-brands fa-github"></i>
+    </a>
+
+</div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-column">
+            <h3>Quick Links</h3>
+
+            <a href="#home">
+                <i class="fa-solid fa-angle-right"></i>
+                Home
+            </a>
+
+            <a href="#dashboard">
+                <i class="fa-solid fa-angle-right"></i>
+                Dashboard
+            </a>
+
+            <a href="#profile">
+                <i class="fa-solid fa-angle-right"></i>
+                Profile
+            </a>
+
+            <a href="#subjects">
+                <i class="fa-solid fa-angle-right"></i>
+                Subjects
+            </a>
+        </div>
+
+        <!-- Academic -->
+        <div class="footer-column">
+            <h3>Academic</h3>
+
+            <a href="#notes">
+                <i class="fa-solid fa-angle-right"></i>
+                Notes
+            </a>
+
+            <a href="#timetable">
+                <i class="fa-solid fa-angle-right"></i>
+                Timetable
+            </a>
+
+            <a href="#dashboard">
+                <i class="fa-solid fa-angle-right"></i>
+                Progress
+            </a>
+
+            <a href="#contact">
+                <i class="fa-solid fa-angle-right"></i>
+                Support
+            </a>
+        </div>
+
+        <!-- Contact -->
+        <div class="footer-column">
+            <h3>Contact Us</h3>
+
+            <a href="mailto:studentportal@example.com">
+                <i class="fa-solid fa-envelope"></i>
+                studentportal@example.com
+            </a>
+
+            <a href="tel:+919876543210">
+                <i class="fa-solid fa-phone"></i>
+                +91 98765 43210
+            </a>
+
+            <div class="footer-location">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>India</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Footer -->
+    <div class="footer-bottom">
+        <p>
+            © 2026 Student Portal. All Rights Reserved.
+        </p>
+
+        <div class="footer-bottom-links">
+            <button type="button" id="privacyBtn">Privacy Policy</button>
+            <button type="button" id="termsBtn">Terms & Conditions</button>
+        </div>
+    </div>
+</footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
