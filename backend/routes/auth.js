@@ -165,21 +165,23 @@ router.get("/test-profile", (req, res) => {
 // ==================== ATTENDANCE ====================
 
 // GET ATTENDANCE
-router.get("/attendance/:userId", async (req, res) => {
+rrouter.get("/attendance/:userId", async (req, res) => {
   try {
     const attendance = await Attendance.findOne({
       userId: req.params.userId,
     });
 
     if (!attendance) {
-      return res.json({
-        attended: 0,
-        totalClasses: 0,
-        minimumTarget: 75,
+      return res.status(404).json({
+        message: "Attendance record not found",
       });
     }
 
-    res.json(attendance);
+    res.json({
+      attended: attendance.attended,
+      totalClasses: attendance.totalClasses,
+      minimumTarget: attendance.minimumTarget,
+    });
   } catch (error) {
     console.error("Get attendance error:", error);
 
