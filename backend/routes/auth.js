@@ -165,7 +165,7 @@ router.get("/test-profile", (req, res) => {
 // ==================== ATTENDANCE ====================
 
 // GET ATTENDANCE
-rrouter.get("/attendance/:userId", async (req, res) => {
+router.get("/attendance/:userId", async (req, res) => {
   try {
     const attendance = await Attendance.findOne({
       userId: req.params.userId,
