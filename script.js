@@ -1,75 +1,19 @@
+/* =========================================================
+   STUDENT PORTAL - MAIN JAVASCRIPT
+   Backend:
+   https://student-portal-n9fs.onrender.com
+========================================================= */
+
+const API_BASE = "https://student-portal-n9fs.onrender.com/api/auth";
+
+/* =========================================================
+   DOM READY
+========================================================= */
+
 document.addEventListener("DOMContentLoaded", () => {
-  // ==================== LOAD ATTENDANCE ====================
-
-  async function loadAttendance() {
-    try {
-      const loggedInUser = JSON.parse(localStorage.getItem("studentUser"));
-
-      if (!loggedInUser || !loggedInUser.id) {
-        return;
-      }
-
-      const response = await fetch(
-        `http://localhost:5000/api/auth/attendance/${loggedInUser.id}`,
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error("Failed to load attendance:", data.message);
-        return;
-      }
-
-      const attended = Number(data.attended) || 0;
-      const totalClasses = Number(data.totalClasses) || 0;
-      const minimumTarget = Number(data.minimumTarget) || 75;
-
-      let percentage = 0;
-
-      if (totalClasses > 0) {
-        percentage = Math.round((attended / totalClasses) * 100);
-      }
-
-      const missed = Math.max(totalClasses - attended, 0);
-
-      const overallAttendance = document.getElementById("overallAttendance");
-
-      const classesAttended = document.getElementById("classesAttended");
-
-      const classesMissed = document.getElementById("classesMissed");
-
-      const minimumTargetElement = document.getElementById("minimumTarget");
-
-      const attendanceStatus = document.getElementById("attendanceStatus");
-
-      if (overallAttendance) {
-        overallAttendance.textContent = `${percentage}%`;
-      }
-
-      if (classesAttended) {
-        classesAttended.textContent = `${attended} / ${totalClasses}`;
-      }
-
-      if (classesMissed) {
-        classesMissed.textContent = `${missed} classes missed`;
-      }
-
-      if (minimumTargetElement) {
-        minimumTargetElement.textContent = `${minimumTarget}%`;
-      }
-
-      if (attendanceStatus) {
-        attendanceStatus.textContent =
-          percentage >= minimumTarget
-            ? "Good standing"
-            : "Below minimum target";
-      }
-    } catch (error) {
-      console.error("Attendance loading error:", error);
-    }
-  }
-
-  loadAttendance();
+  /* =======================================================
+     LOGIN CHECK
+  ======================================================= */
 
   const currentUser = localStorage.getItem("studentUser");
 
@@ -77,11 +21,14 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
     return;
   }
-  /* =================================================
-       HELPER FUNCTIONS
-  ================================================= */
 
-  const getElement = (id) => document.getElementById(id);
+  /* =======================================================
+     HELPER FUNCTIONS
+  ======================================================= */
+
+  const getElement = (id) => {
+    return document.getElementById(id);
+  };
 
   const goToSection = (sectionId) => {
     const section = getElement(sectionId);
@@ -94,9 +41,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  /* =================================================
-       ELEMENTS
-  ================================================= */
+  /* =======================================================
+     USER DATA
+  ======================================================= */
+
+  let loggedInUser = null;
+
+  try {
+    loggedInUser = JSON.parse(localStorage.getItem("studentUser"));
+  } catch (error) {
+    console.error("User data error:", error);
+  }
+
+  if (!loggedInUser || !loggedInUser.id) {
+    localStorage.clear();
+    window.location.href = "login.html";
+    return;
+  }
+
+  /* =======================================================
+     ELEMENTS
+  ======================================================= */
 
   const logoBtn = getElement("logoBtn");
   const footerLogoBtn = getElement("footerLogoBtn");
@@ -116,16 +81,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeSearchBtn = getElement("closeSearchBtn");
 
   const notificationBtn = getElement("notificationBtn");
+
   const notificationPanel = getElement("notificationPanel");
-  const clearNotifications = getElement("clearNotifications");
+
   const notificationList = getElement("notificationList");
+
   const notificationCount = getElement("notificationCount");
+
+  const clearNotifications = getElement("clearNotifications");
 
   const topBtn = getElement("topBtn");
 
-  /* =================================================
-       LOGO
-  ================================================= */
+  /* =======================================================
+     LOGO
+  ======================================================= */
 
   if (logoBtn) {
     logoBtn.addEventListener("click", () => {
@@ -140,9 +109,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =================================================
-       HERO BUTTONS
-  ================================================= */
+  /* =======================================================
+     HERO BUTTONS
+  ======================================================= */
 
   if (exploreBtn) {
     exploreBtn.addEventListener("click", () => {
@@ -156,11 +125,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =================================================
-       MOBILE MENU
-  ================================================= */
+  /* =======================================================
+     MOBILE MENU
+  ======================================================= */
 
-  const closeMobileMenu = () => {
+  function closeMobileMenu() {
     if (navLinks) {
       navLinks.classList.remove("active");
     }
@@ -175,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       menuBtn.setAttribute("aria-expanded", "false");
     }
-  };
+  }
 
   if (menuBtn && navLinks) {
     menuBtn.setAttribute("aria-expanded", "false");
@@ -189,6 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (icon) {
         icon.classList.toggle("fa-bars", !isOpen);
+
         icon.classList.toggle("fa-xmark", isOpen);
       }
 
@@ -200,9 +170,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =================================================
-       DARK / LIGHT MODE
-  ================================================= */
+  /* =======================================================
+     DARK / LIGHT MODE
+  ======================================================= */
 
   const savedTheme = localStorage.getItem("studentPortalTheme");
 
@@ -211,6 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (themeIcon) {
       themeIcon.classList.remove("fa-moon");
+
       themeIcon.classList.add("fa-sun");
     }
   }
@@ -221,6 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (themeIcon) {
         themeIcon.classList.toggle("fa-moon", !isDark);
+
         themeIcon.classList.toggle("fa-sun", isDark);
       }
 
@@ -238,11 +210,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =================================================
-       SEARCH
-  ================================================= */
+  /* =======================================================
+     SEARCH
+  ======================================================= */
 
-  const closeSearch = () => {
+  function closeSearch() {
     if (searchBox) {
       searchBox.classList.remove("active");
     }
@@ -250,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (searchInput) {
       searchInput.value = "";
     }
-  };
+  }
 
   if (searchBtn && searchBox) {
     searchBtn.addEventListener("click", (event) => {
@@ -278,6 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!query) {
         alert("Please enter something to search.");
+
         return;
       }
 
@@ -288,35 +261,43 @@ document.addEventListener("DOMContentLoaded", () => {
             "subjects",
             "data structure",
             "database",
-            "web",
+            "web development",
             "network",
+            "computer networks",
           ],
           target: "subjects",
         },
+
         {
           words: ["note", "notes", "study"],
           target: "notes",
         },
+
         {
           words: ["profile", "student"],
           target: "profile",
         },
+
         {
           words: ["time", "class", "schedule", "timetable"],
           target: "timetable",
         },
+
         {
           words: ["attendance", "present"],
           target: "attendance",
         },
+
         {
           words: ["task", "tasks", "assignment", "pending"],
           target: "tasks",
         },
+
         {
           words: ["dashboard", "home", "progress"],
           target: "dashboard",
         },
+
         {
           words: ["contact", "help", "support"],
           target: "contact",
@@ -329,6 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (result) {
         closeSearch();
+
         goToSection(result.target);
       } else {
         alert(
@@ -338,9 +320,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =================================================
-       NOTIFICATIONS
-  ================================================= */
+  /* =======================================================
+     NOTIFICATIONS
+  ======================================================= */
 
   if (notificationBtn && notificationPanel) {
     notificationBtn.addEventListener("click", (event) => {
@@ -354,16 +336,23 @@ document.addEventListener("DOMContentLoaded", () => {
     clearNotifications.addEventListener("click", () => {
       if (notificationList) {
         notificationList.innerHTML = `
-          <div class="notification-empty">
-            <i class="fa-solid fa-circle-check"></i>
-            <strong>All caught up!</strong>
-            <small>You have no new notifications.</small>
-          </div>
-        `;
+            <div class="notification-empty">
+              <i class="fa-solid fa-circle-check"></i>
+
+              <strong>
+                All caught up!
+              </strong>
+
+              <small>
+                You have no new notifications.
+              </small>
+            </div>
+          `;
       }
 
       if (notificationCount) {
         notificationCount.textContent = "0";
+
         notificationCount.style.display = "none";
       }
     });
@@ -380,18 +369,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const target = item.dataset.target;
 
       if (target) {
-        if (notificationPanel) {
-          notificationPanel.classList.remove("active");
-        }
+        notificationPanel?.classList.remove("active");
 
         goToSection(target);
       }
     });
   }
 
-  /* =================================================
-       DASHBOARD / QUICK ACTIONS
-  ================================================= */
+  /* =======================================================
+     DASHBOARD QUICK ACTIONS
+  ======================================================= */
 
   document.querySelectorAll(".action-card, .stat-card").forEach((card) => {
     card.addEventListener("click", () => {
@@ -401,12 +388,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      if (
-        card.classList.contains("action-card") &&
-        target === "profile" &&
-        typeof openProfileModal === "function"
-      ) {
+      if (card.classList.contains("action-card") && target === "profile") {
         openProfileModal();
+
         return;
       }
 
@@ -414,64 +398,181 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  /* =================================================
-       SUBJECT MODAL
-  ================================================= */
+  /* =======================================================
+     LOAD ATTENDANCE
+  ======================================================= */
+
+  async function loadAttendance() {
+    try {
+      const loggedInUser = JSON.parse(localStorage.getItem("studentUser"));
+
+      if (!loggedInUser || !loggedInUser.id) {
+        return;
+      }
+
+      const response = await fetch(
+        `https://student-portal-n9fs.onrender.com/api/auth/attendance/${loggedInUser.id}`,
+      );
+
+      const data = await response.json();
+
+      console.log("Attendance API data:", data);
+
+      if (!response.ok) {
+        console.error("Failed to load attendance:", data.message);
+        return;
+      }
+
+      const attended = Number(data.attended) || 0;
+      const totalClasses = Number(data.totalClasses) || 0;
+      const minimumTarget = Number(data.minimumTarget) || 75;
+
+      let percentage = 0;
+
+      if (totalClasses > 0) {
+        percentage = Math.round((attended / totalClasses) * 100);
+      }
+
+      const missed = Math.max(totalClasses - attended, 0);
+
+      const overallAttendance = document.getElementById("overallAttendance");
+      const classesAttended = document.getElementById("classesAttended");
+      const classesMissed = document.getElementById("classesMissed");
+      const minimumTargetElement = document.getElementById("minimumTarget");
+      const attendanceStatus = document.getElementById("attendanceStatus");
+
+      if (overallAttendance) {
+        overallAttendance.textContent = `${percentage}%`;
+      }
+
+      if (classesAttended) {
+        classesAttended.textContent = `${attended} / ${totalClasses}`;
+      }
+
+      if (classesMissed) {
+        classesMissed.textContent = `${missed} classes missed`;
+      }
+
+      if (minimumTargetElement) {
+        minimumTargetElement.textContent = `${minimumTarget}%`;
+      }
+
+      if (attendanceStatus) {
+        attendanceStatus.textContent =
+          percentage >= minimumTarget
+            ? "Good standing"
+            : "Below minimum target";
+      }
+
+      console.log(
+        `Attendance updated: ${attended}/${totalClasses} = ${percentage}%`,
+      );
+    } catch (error) {
+      console.error("Attendance loading error:", error);
+    }
+  }
+  /* =======================================================
+     LOAD ATTENDANCE ONCE
+  ======================================================= */
+
+  loadAttendance();
+
+  /* =======================================================
+     LOAD SUBJECTS / NOTES COUNTS
+  ======================================================= */
+
+  function loadSubjectsAndNotesStats() {
+    const subjectItems = document.querySelectorAll("#subjects .subject-card");
+
+    const dashboardSubjects = getElement("dashboardSubjects");
+
+    if (dashboardSubjects) {
+      dashboardSubjects.textContent = subjectItems.length || 4;
+    }
+
+    const noteItems = document.querySelectorAll("#notes .note-card");
+
+    const dashboardNotes = getElement("dashboardNotes");
+
+    if (dashboardNotes) {
+      dashboardNotes.textContent = noteItems.length || 24;
+    }
+  }
+
+  loadSubjectsAndNotesStats();
+
+  /* =======================================================
+     SUBJECT DETAILS
+  ======================================================= */
 
   const subjectModal = getElement("subjectModal");
 
-  const subjects = {
+  const subjectDetails = {
     "Data Structures": {
       topics: "Arrays, Linked Lists, Stacks, Queues, Trees and Graphs.",
+
       difficulty: "Medium",
-      progress: 65,
+
+      progress: 70,
     },
 
     "Database Management": {
       topics:
         "SQL, Tables, Primary Keys, Foreign Keys, Normalization, Joins and Transactions.",
+
       difficulty: "Medium",
-      progress: 55,
+
+      progress: 65,
     },
 
     "Web Development": {
       topics: "HTML, CSS, JavaScript, DOM, Events and Responsive Design.",
+
       difficulty: "Easy",
-      progress: 75,
+
+      progress: 80,
     },
 
     "Computer Networks": {
       topics:
         "OSI Model, TCP/IP, IP Addressing, Routing, DNS and Network Protocols.",
-      difficulty: "Hard",
-      progress: 40,
+
+      difficulty: "Medium",
+
+      progress: 60,
     },
   };
 
   document.querySelectorAll(".subject-btn").forEach((button) => {
     button.addEventListener("click", () => {
-      const subject = subjects[button.dataset.subject];
+      const subjectName = button.dataset.subject;
+
+      const subject = subjectDetails[subjectName];
 
       if (!subject || !subjectModal) {
         return;
       }
 
-      const subjectName = getElement("modalSubjectName");
-      const topics = getElement("modalTopics");
-      const difficulty = getElement("modalDifficulty");
+      const modalSubjectName = getElement("modalSubjectName");
+
+      const modalTopics = getElement("modalTopics");
+
+      const modalDifficulty = getElement("modalDifficulty");
+
       const progressBar = getElement("progressBar");
+
       const progressText = getElement("progressText");
 
-      if (subjectName) {
-        subjectName.textContent = button.dataset.subject;
+      if (modalSubjectName) {
+        modalSubjectName.textContent = subjectName;
       }
 
-      if (topics) {
-        topics.textContent = subject.topics;
+      if (modalTopics) {
+        modalTopics.textContent = subject.topics;
       }
 
-      if (difficulty) {
-        difficulty.textContent = subject.difficulty;
+      if (modalDifficulty) {
+        modalDifficulty.textContent = subject.difficulty;
       }
 
       if (progressBar) {
@@ -486,68 +587,135 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  /* =================================================
-       NOTES MODAL
-  ================================================= */
+  /* =======================================================
+     NOTES
+  ======================================================= */
 
   const notesModal = getElement("notesModal");
 
-  const notes = {
-    "Data Structures":
-      "Study Arrays, Linked Lists, Stacks, Queues, Trees, Graphs and common algorithms. Focus on time complexity and implementation.",
+  const notesContent = {
+    "Data Structures": `
+      <h3>Data Structures</h3>
 
-    Database:
-      "Study SQL queries, primary keys, foreign keys, normalization, joins, transactions and relational database concepts.",
+      <p>
+        Data structures are ways of organizing
+        and storing data so that it can be
+        accessed and modified efficiently.
+      </p>
 
-    "Web Development":
-      "Study HTML structure, CSS styling, JavaScript fundamentals, DOM manipulation, events and responsive website design.",
+      <h4>Important Topics</h4>
+
+      <ul>
+        <li>Arrays</li>
+        <li>Linked Lists</li>
+        <li>Stacks</li>
+        <li>Queues</li>
+        <li>Trees</li>
+        <li>Graphs</li>
+        <li>Searching and Sorting</li>
+      </ul>
+    `,
+
+    Database: `
+      <h3>Database Management</h3>
+
+      <p>
+        A database is an organized collection
+        of data that can be stored, managed
+        and retrieved efficiently.
+      </p>
+
+      <h4>Important Topics</h4>
+
+      <ul>
+        <li>SQL</li>
+        <li>Tables</li>
+        <li>Primary Key</li>
+        <li>Foreign Key</li>
+        <li>Normalization</li>
+        <li>Relationships</li>
+        <li>CRUD Operations</li>
+      </ul>
+    `,
+
+    "Web Development": `
+      <h3>Web Development</h3>
+
+      <p>
+        Web development is the process of
+        creating websites and web applications.
+      </p>
+
+      <h4>Important Topics</h4>
+
+      <ul>
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+        <li>DOM</li>
+        <li>Responsive Design</li>
+        <li>APIs</li>
+        <li>Frontend and Backend</li>
+      </ul>
+    `,
   };
 
-  document.querySelectorAll(".view-notes-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      if (!notesModal) {
-        return;
-      }
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest(".view-notes-btn");
 
-      const noteName = button.dataset.note;
+    if (!button) {
+      return;
+    }
 
-      const title = getElement("notesModalTitle");
-      const text = getElement("notesModalText");
+    if (!notesModal) {
+      return;
+    }
 
-      if (title) {
-        title.textContent = `${noteName} Notes`;
-      }
+    const noteName = button.dataset.note;
 
-      if (text) {
-        text.textContent = notes[noteName] || "Notes are not available.";
-      }
+    const title = getElement("notesModalTitle");
 
-      notesModal.classList.add("active");
-    });
+    const text = getElement("notesModalText");
+
+    if (title) {
+      title.textContent = `${noteName} Notes`;
+    }
+
+    if (text) {
+      text.innerHTML = notesContent[noteName] || "<p>No notes available.</p>";
+    }
+
+    notesModal.classList.add("active");
   });
 
-  /* =================================================
-       PROFILE
-  ================================================= */
+  /* =======================================================
+     PROFILE
+  ======================================================= */
 
   const profileModal = getElement("profileModal");
+
   const profileForm = getElement("profileForm");
 
   const profileFields = [
     ["studentName", "profileNameInput", "studentName"],
+
     ["studentBranch", "profileBranchInput", "studentBranch"],
+
     ["studentYear", "profileYearInput", "studentYear"],
+
     ["studentCollege", "profileCollegeInput", "studentCollege"],
+
     ["studentEmail", "profileEmailInput", "studentEmail"],
   ];
 
-  function openProfileModal() {
+  window.openProfileModal = function () {
     if (!profileModal) {
       return;
     }
 
     profileFields.forEach(([displayId, inputId, storageKey]) => {
       const display = getElement(displayId);
+
       const input = getElement(inputId);
 
       if (!display || !input) {
@@ -566,82 +734,86 @@ document.addEventListener("DOMContentLoaded", () => {
     if (firstInput) {
       setTimeout(() => firstInput.focus(), 100);
     }
-  }
+  };
 
   const editProfileBtn = getElement("editProfileBtn");
 
   if (editProfileBtn) {
-    editProfileBtn.addEventListener("click", openProfileModal);
+    editProfileBtn.addEventListener("click", window.openProfileModal);
   }
 
   if (profileForm) {
     profileForm.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      const loggedInUser = JSON.parse(localStorage.getItem("studentUser"));
+      const nameInput = getElement("profileNameInput");
 
-      if (!loggedInUser || !loggedInUser.id) {
-        alert("Please login again.");
-        window.location.href = "login.html";
+      const branchInput = getElement("profileBranchInput");
+
+      const yearInput = getElement("profileYearInput");
+
+      const collegeInput = getElement("profileCollegeInput");
+
+      if (!nameInput || !branchInput || !yearInput || !collegeInput) {
         return;
       }
 
       const updatedProfile = {
-        name: getElement("profileNameInput").value.trim(),
-        course: getElement("profileBranchInput").value.trim(),
-        year: getElement("profileYearInput").value.trim(),
-        college: getElement("profileCollegeInput").value.trim(),
+        name: nameInput.value.trim(),
+
+        course: branchInput.value.trim(),
+
+        year: yearInput.value.trim(),
+
+        college: collegeInput.value.trim(),
       };
 
       try {
-        const response = await fetch(
-          `http://localhost:5000/api/auth/profile/${loggedInUser.id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedProfile),
+        const response = await fetch(`${API_BASE}/profile/${loggedInUser.id}`, {
+          method: "PUT",
+
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+
+          body: JSON.stringify(updatedProfile),
+        });
 
         const data = await response.json();
 
         if (!response.ok) {
           alert(data.message || "Profile update failed.");
+
           return;
         }
 
-        // Update the displayed profile
-        getElement("studentName").textContent = data.user.name;
-        getElement("studentBranch").textContent = data.user.course;
-        getElement("studentYear").textContent = data.user.year;
-        getElement("studentCollege").textContent =
-          data.user.college || "My College";
-        getElement("studentEmail").textContent = data.user.email;
+        if (data.user) {
+          loggedInUser.name = data.user.name;
 
-        // Update localStorage
-        localStorage.setItem("studentName", data.user.name);
+          loggedInUser.course = data.user.course;
 
-        localStorage.setItem("studentBranch", data.user.course);
+          loggedInUser.year = data.user.year;
 
-        localStorage.setItem("studentYear", data.user.year);
+          loggedInUser.college = data.user.college || "My College";
 
-        localStorage.setItem(
-          "studentCollege",
-          data.user.college || "My College",
-        );
-
-        // Update logged-in user data
-        loggedInUser.name = data.user.name;
-        loggedInUser.course = data.user.course;
-        loggedInUser.year = data.user.year;
+          loggedInUser.email = data.user.email || loggedInUser.email;
+        }
 
         localStorage.setItem("studentUser", JSON.stringify(loggedInUser));
 
-        if (profileModal) {
-          profileModal.classList.remove("active");
-        }
+        localStorage.setItem("studentName", loggedInUser.name);
+
+        localStorage.setItem("studentEmail", loggedInUser.email);
+
+        localStorage.setItem("studentBranch", loggedInUser.course);
+
+        localStorage.setItem("studentYear", loggedInUser.year);
+
+        localStorage.setItem("studentCollege", loggedInUser.college);
+
+        loadProfile();
+
+        profileModal?.classList.remove("active");
 
         alert("Profile updated successfully!");
       } catch (error) {
@@ -652,228 +824,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =================================================
-       HELP MODAL
-  ================================================= */
-
-  const helpModal = getElement("helpModal");
-  const helpBtn = getElement("helpBtn");
-
-  if (helpBtn && helpModal) {
-    helpBtn.addEventListener("click", () => {
-      helpModal.classList.add("active");
-    });
-  }
-
-  /* =================================================
-       TASKS
-  ================================================= */
-
-  const taskModal = getElement("taskModal");
-  const markTaskBtn = getElement("markTaskBtn");
-
-  let selectedTask = null;
-
-  const updatePendingTaskCount = () => {
-    const pendingTasks = document.querySelectorAll(
-      ".task-item:not(.completed)",
-    ).length;
-
-    const pendingHeading = document.querySelector("#tasks .section-heading h2");
-
-    const dashboardNumber = document.querySelector(
-      '.stat-card[data-target="tasks"] h3',
-    );
-
-    if (dashboardNumber) {
-      dashboardNumber.textContent = pendingTasks;
-    }
-
-    if (pendingHeading) {
-      pendingHeading.textContent = "Pending Tasks";
-    }
-  };
-
-  document.querySelectorAll(".task-item").forEach((task) => {
-    task.addEventListener("click", () => {
-      if (task.classList.contains("completed")) {
-        alert("This task is already completed.");
-        return;
-      }
-
-      selectedTask = task;
-
-      const title = getElement("taskModalTitle");
-      const text = getElement("taskModalText");
-
-      if (title) {
-        title.textContent = task.dataset.task || "Task";
-      }
-
-      if (text) {
-        text.textContent =
-          "This task is currently pending. Complete it and mark it as done when finished.";
-      }
-
-      if (markTaskBtn) {
-        markTaskBtn.style.display = "inline-flex";
-      }
-
-      if (taskModal) {
-        taskModal.classList.add("active");
-      }
-    });
-  });
-
-  if (markTaskBtn) {
-    markTaskBtn.addEventListener("click", () => {
-      if (!selectedTask) {
-        return;
-      }
-
-      selectedTask.classList.add("completed");
-
-      selectedTask.setAttribute(
-        "aria-label",
-        `${selectedTask.dataset.task} completed`,
-      );
-
-      const smallText = selectedTask.querySelector("small");
-
-      if (smallText) {
-        smallText.textContent = "Completed";
-      }
-
-      const arrow = selectedTask.querySelector(".fa-arrow-right");
-
-      if (arrow) {
-        arrow.classList.remove("fa-arrow-right");
-        arrow.classList.add("fa-check");
-      }
-
-      if (taskModal) {
-        taskModal.classList.remove("active");
-      }
-
-      updatePendingTaskCount();
-
-      alert("Task marked as completed!");
-
-      selectedTask = null;
-    });
-  }
-
-  updatePendingTaskCount();
-
-  /* =================================================
-       CLOSE MODALS
-  ================================================= */
-
-  function closeModal(modal) {
-    if (modal) {
-      modal.classList.remove("active");
-    }
-  }
-
-  const closeButtons = [
-    ["closeSubjectModal", subjectModal],
-    ["closeNotesModal", notesModal],
-    ["closeNotesBtn", notesModal],
-    ["closeProfileModal", profileModal],
-    ["cancelProfileBtn", profileModal],
-    ["closeHelpModal", helpModal],
-    ["closeHelpBtn", helpModal],
-    ["closeTaskModal", taskModal],
-  ];
-
-  closeButtons.forEach(([buttonId, modal]) => {
-    const button = getElement(buttonId);
-
-    if (button) {
-      button.addEventListener("click", () => {
-        closeModal(modal);
-      });
-    }
-  });
-
-  /* =================================================
-       OUTSIDE CLICK
-  ================================================= */
-
-  document.addEventListener("click", (event) => {
-    if (
-      searchBox &&
-      searchBtn &&
-      !searchBox.contains(event.target) &&
-      !searchBtn.contains(event.target)
-    ) {
-      searchBox.classList.remove("active");
-    }
-
-    if (
-      notificationPanel &&
-      notificationBtn &&
-      !notificationPanel.contains(event.target) &&
-      !notificationBtn.contains(event.target)
-    ) {
-      notificationPanel.classList.remove("active");
-    }
-
-    [subjectModal, notesModal, profileModal, helpModal, taskModal].forEach(
-      (modal) => {
-        if (modal && event.target === modal) {
-          closeModal(modal);
-        }
-      },
-    );
-  });
-
-  /* =================================================
-       ESC KEY
-  ================================================= */
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape") {
-      return;
-    }
-
-    [subjectModal, notesModal, profileModal, helpModal, taskModal].forEach(
-      closeModal,
-    );
-
-    if (searchBox) {
-      searchBox.classList.remove("active");
-    }
-
-    if (notificationPanel) {
-      notificationPanel.classList.remove("active");
-    }
-
-    closeMobileMenu();
-  });
-
-  /* =================================================
-       LOGIN USER → PROFILE
-  ================================================= */
-
-  const loggedInUser = JSON.parse(localStorage.getItem("studentUser"));
-
-  if (loggedInUser) {
-    localStorage.setItem("studentName", loggedInUser.name || "");
-
-    localStorage.setItem("studentEmail", loggedInUser.email || "");
-
-    localStorage.setItem(
-      "studentBranch",
-      loggedInUser.course || "Computer Science",
-    );
-
-    localStorage.setItem("studentYear", loggedInUser.year || "3rd Year");
-  }
-
-  /* =================================================
-       LOAD SAVED PROFILE
-  ================================================= */
+  /* =======================================================
+     LOAD PROFILE
+  ======================================================= */
 
   function loadProfile() {
     profileFields.forEach(([displayId, , storageKey]) => {
@@ -893,9 +846,236 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadProfile();
 
-  /* =================================================
-       BACK TO TOP
-  ================================================= */
+  /* =======================================================
+     HELP MODAL
+  ======================================================= */
+
+  const helpModal = getElement("helpModal");
+
+  const helpBtn = getElement("helpBtn");
+
+  if (helpBtn && helpModal) {
+    helpBtn.addEventListener("click", () => {
+      helpModal.classList.add("active");
+    });
+  }
+
+  /* =======================================================
+     TIMETABLE MODAL
+  ======================================================= */
+
+  const timetableModal = getElement("timetableModal");
+
+  document.addEventListener("click", (event) => {
+    const item = event.target.closest(".timetable-item");
+
+    if (!item) {
+      return;
+    }
+
+    if (!timetableModal) {
+      return;
+    }
+
+    const subject = item.dataset.subject || "Class Details";
+
+    const day = item.dataset.day || "Day not available";
+
+    const time = item.dataset.time || "Time not available";
+
+    const room = item.dataset.room || "Room 101";
+
+    const modalSubject = getElement("timetableModalSubject");
+
+    const modalDay = getElement("timetableModalDay");
+
+    const modalTime = getElement("timetableModalTime");
+
+    const modalRoom = getElement("timetableModalRoom");
+
+    const modalStatus = getElement("timetableModalStatus");
+
+    if (modalSubject) {
+      modalSubject.textContent = subject;
+    }
+
+    if (modalDay) {
+      modalDay.textContent = day;
+    }
+
+    if (modalTime) {
+      modalTime.textContent = time;
+    }
+
+    if (modalRoom) {
+      modalRoom.textContent = room;
+    }
+
+    if (modalStatus) {
+      modalStatus.textContent = "Scheduled";
+    }
+
+    timetableModal.classList.add("active");
+  });
+
+  /* =======================================================
+     CONTACT FORM
+  ======================================================= */
+
+  const contactForm = getElement("contactForm");
+
+  if (contactForm) {
+    contactForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const name = getElement("contactName")?.value.trim();
+
+      const email = getElement("contactEmail")?.value.trim();
+
+      const subject = getElement("contactSubject")?.value.trim();
+
+      const message = getElement("contactMessage")?.value.trim();
+
+      if (!name || !email || !subject || !message) {
+        alert("Please fill in all fields.");
+
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/messages`, {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            name,
+            email,
+            subject,
+            message,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert(data.message || "Failed to send message.");
+
+          return;
+        }
+
+        alert("Your message has been sent successfully!");
+
+        contactForm.reset();
+
+        console.log("Contact message saved:", data.data);
+      } catch (error) {
+        console.error("Contact form error:", error);
+
+        alert("Cannot connect to server. Make sure the backend is running.");
+      }
+    });
+  }
+
+  /* =======================================================
+     CLOSE MODALS
+  ======================================================= */
+
+  const modalIds = [
+    "subjectModal",
+
+    "notesModal",
+
+    "profileModal",
+
+    "helpModal",
+
+    "taskModal",
+
+    "timetableModal",
+  ];
+
+  function closeModalById(id) {
+    const modal = getElement(id);
+
+    if (modal) {
+      modal.classList.remove("active");
+    }
+  }
+
+  const closeButtonMap = {
+    closeSubjectModal: "subjectModal",
+
+    closeNotesModal: "notesModal",
+
+    closeNotesBtn: "notesModal",
+
+    closeProfileModal: "profileModal",
+
+    cancelProfileBtn: "profileModal",
+
+    closeHelpModal: "helpModal",
+
+    closeHelpBtn: "helpModal",
+
+    closeTaskModal: "taskModal",
+
+    closeTimetableModal: "timetableModal",
+  };
+
+  Object.entries(closeButtonMap).forEach(([buttonId, modalId]) => {
+    const button = getElement(buttonId);
+
+    if (button) {
+      button.addEventListener("click", () => {
+        closeModalById(modalId);
+      });
+    }
+  });
+
+  /* =======================================================
+     OUTSIDE MODAL CLICK
+  ======================================================= */
+
+  modalIds.forEach((modalId) => {
+    const modal = getElement(modalId);
+
+    if (!modal) {
+      return;
+    }
+
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        modal.classList.remove("active");
+      }
+    });
+  });
+
+  /* =======================================================
+     ESC KEY
+  ======================================================= */
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") {
+      return;
+    }
+
+    modalIds.forEach(closeModalById);
+
+    closeSearch();
+
+    if (notificationPanel) {
+      notificationPanel.classList.remove("active");
+    }
+
+    closeMobileMenu();
+  });
+
+  /* =======================================================
+     BACK TO TOP
+  ======================================================= */
 
   window.addEventListener("scroll", () => {
     if (topBtn) {
@@ -912,42 +1092,40 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =================================================
-       INITIAL ACCESSIBILITY
-  ================================================= */
-
-  if (themeBtn) {
-    const isDark = document.body.classList.contains("dark");
-
-    themeBtn.setAttribute(
-      "aria-label",
-      isDark ? "Switch to light mode" : "Switch to dark mode",
-    );
-  }
+  /* =======================================================
+     INITIAL MESSAGE
+  ======================================================= */
 
   console.log("Student Portal JavaScript loaded successfully.");
 });
 
-// ==================== LOGOUT ====================
-
-// ==================== LOGOUT ====================
+/* =========================================================
+   LOGOUT
+========================================================= */
 
 const logoutBtn = document.getElementById("logoutBtn");
 
 if (logoutBtn) {
-  logoutBtn.addEventListener("click", function () {
+  logoutBtn.addEventListener("click", () => {
     const confirmLogout = confirm("Are you sure you want to logout?");
 
     if (confirmLogout) {
       localStorage.clear();
+
       window.location.href = "login.html";
     }
   });
 }
 
-// ==================== LOAD TASKS ====================
+/* =========================================================
+   TASK MANAGEMENT
+========================================================= */
 
-// ==================== LOAD TASKS FROM MONGODB ====================
+let selectedTask = null;
+
+/* =========================================================
+   LOAD TASKS FROM MONGODB
+========================================================= */
 
 async function loadTasks() {
   try {
@@ -960,60 +1138,80 @@ async function loadTasks() {
     const taskList = document.getElementById("taskList");
 
     if (!taskList) {
-      console.error("Task list element not found");
       return;
     }
 
-    const response = await fetch(
-      `http://localhost:5000/api/auth/tasks/${loggedInUser.id}`,
-    );
+    const response = await fetch(`${API_BASE}/tasks/${loggedInUser.id}`);
 
     const tasks = await response.json();
 
     if (!response.ok) {
       console.error("Failed to load tasks:", tasks.message);
+
       return;
     }
 
-    // Clear old tasks
     taskList.innerHTML = "";
 
-    // If there are no tasks
-    if (!tasks.length) {
+    if (!Array.isArray(tasks)) {
+      console.error("Invalid task data.");
+
+      return;
+    }
+
+    if (tasks.length === 0) {
       taskList.innerHTML = `
         <p class="no-tasks">
           No pending tasks 🎉
         </p>
       `;
+
+      updateDashboardTaskCount([]);
+
       return;
     }
 
-    // Create task buttons
     tasks.forEach((task) => {
       const taskButton = document.createElement("button");
 
+      taskButton.type = "button";
+
       taskButton.className = "task-item";
 
-      taskButton.setAttribute("data-task", task.title);
+      if (task.completed) {
+        taskButton.classList.add("completed");
+      }
+
+      taskButton.dataset.task = task.title;
+
+      taskButton.dataset.id = task._id;
 
       taskButton.innerHTML = `
-        <i class="fa-solid fa-list-check"></i>
 
-        <span>
-          <strong>
-            ${task.title}
-          </strong>
+          <i class="fa-solid fa-list-check"></i>
 
-          <small>
-            ${task.dueDate || "No due date"}
-          </small>
-        </span>
+          <span>
 
-        <i class="fa-solid fa-arrow-right"></i>
-      `;
+            <strong>
+              ${escapeHTML(task.title || "Task")}
+            </strong>
+
+            <small>
+              ${escapeHTML(task.dueDate || "No due date")}
+            </small>
+
+          </span>
+
+          <i class="fa-solid ${
+            task.completed ? "fa-check" : "fa-arrow-right"
+          }"></i>
+
+        `;
 
       taskList.appendChild(taskButton);
     });
+
+    updateDashboardTaskCount(tasks);
 
     console.log("Tasks loaded from MongoDB:", tasks);
   } catch (error) {
@@ -1021,101 +1219,139 @@ async function loadTasks() {
   }
 }
 
-loadTasks();
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
-// ==================== TASK MODAL ====================
+function escapeHTML(value) {
+  const div = document.createElement("div");
 
-const taskModal = document.getElementById("taskModal");
-const taskModalTitle = document.getElementById("taskModalTitle");
-const taskModalText = document.getElementById("taskModalText");
-const closeTaskModal = document.getElementById("closeTaskModal");
-const markTaskBtn = document.getElementById("markTaskBtn");
+  div.textContent = String(value);
 
-let selectedTask = null;
+  return div.innerHTML;
+}
 
-// OPEN TASK MODAL
-document.addEventListener("click", function (event) {
+/* =========================================================
+   DASHBOARD TASK COUNT
+========================================================= */
+
+function updateDashboardTaskCount(tasks) {
+  const pendingTasks = tasks.filter((task) => task.completed !== true);
+
+  const dashboardTasks = document.querySelectorAll("#dashboardTasks");
+
+  dashboardTasks.forEach((element) => {
+    element.textContent = pendingTasks.length;
+  });
+}
+
+/* =========================================================
+   TASK CLICK
+========================================================= */
+
+document.addEventListener("click", async (event) => {
   const taskButton = event.target.closest(".task-item");
 
   if (!taskButton) {
     return;
   }
 
-  const taskTitle = taskButton.getAttribute("data-task");
+  const taskId = taskButton.dataset.id;
 
   const loggedInUser = JSON.parse(localStorage.getItem("studentUser"));
 
-  if (!loggedInUser || !loggedInUser.id) {
+  if (!loggedInUser || !loggedInUser.id || !taskId) {
     return;
   }
 
-  fetch(`http://localhost:5000/api/auth/tasks/${loggedInUser.id}`)
-    .then((response) => response.json())
-    .then((tasks) => {
-      selectedTask = tasks.find((task) => task.title === taskTitle);
+  try {
+    const response = await fetch(`${API_BASE}/tasks/${loggedInUser.id}`);
 
-      if (!selectedTask) {
-        return;
-      }
+    const tasks = await response.json();
 
-      taskModalTitle.textContent = selectedTask.title;
+    if (!response.ok) {
+      return;
+    }
 
+    selectedTask = tasks.find((task) => String(task._id) === String(taskId));
+
+    if (!selectedTask) {
+      return;
+    }
+
+    const taskModal = document.getElementById("taskModal");
+
+    const taskModalTitle = document.getElementById("taskModalTitle");
+
+    const taskModalText = document.getElementById("taskModalText");
+
+    const markTaskBtn = document.getElementById("markTaskBtn");
+
+    if (taskModalTitle) {
+      taskModalTitle.textContent = selectedTask.title || "Task";
+    }
+
+    if (taskModalText) {
       taskModalText.innerHTML = `
-        ${selectedTask.description || "No description"}
-        <br><br>
-        <strong>
-          Due: ${selectedTask.dueDate || "No due date"}
-        </strong>
-      `;
 
+          ${escapeHTML(selectedTask.description || "No description")}
+
+          <br><br>
+
+          <strong>
+            Due:
+            ${escapeHTML(selectedTask.dueDate || "No due date")}
+          </strong>
+
+        `;
+    }
+
+    if (markTaskBtn) {
       markTaskBtn.textContent = selectedTask.completed
         ? "Completed ✓"
         : "Mark as Completed";
 
       markTaskBtn.disabled = selectedTask.completed;
+    }
 
+    if (taskModal) {
       taskModal.classList.add("active");
-    })
-    .catch((error) => {
-      console.error("Task modal error:", error);
-    });
+    }
+  } catch (error) {
+    console.error("Task modal error:", error);
+  }
 });
 
-// CLOSE TASK MODAL
-if (closeTaskModal) {
-  closeTaskModal.addEventListener("click", function () {
-    taskModal.classList.remove("active");
+/* =========================================================
+   MARK TASK COMPLETED
+========================================================= */
 
-    selectedTask = null;
-  });
-}
+const markTaskBtn = document.getElementById("markTaskBtn");
 
-// MARK TASK AS COMPLETED
 if (markTaskBtn) {
-  markTaskBtn.addEventListener("click", async function () {
+  markTaskBtn.addEventListener("click", async () => {
     if (!selectedTask) {
       return;
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/auth/tasks/${selectedTask._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: selectedTask.title,
+      const response = await fetch(`${API_BASE}/tasks/${selectedTask._id}`, {
+        method: "PUT",
 
-            description: selectedTask.description,
-
-            dueDate: selectedTask.dueDate,
-
-            completed: true,
-          }),
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+
+        body: JSON.stringify({
+          title: selectedTask.title,
+
+          description: selectedTask.description,
+
+          dueDate: selectedTask.dueDate,
+
+          completed: true,
+        }),
+      });
 
       const data = await response.json();
 
@@ -1125,15 +1361,21 @@ if (markTaskBtn) {
         return;
       }
 
-      selectedTask = data.task;
-
       markTaskBtn.textContent = "Completed ✓";
 
       markTaskBtn.disabled = true;
 
       alert("Task marked as completed!");
 
-      loadTasks();
+      const taskModal = document.getElementById("taskModal");
+
+      if (taskModal) {
+        taskModal.classList.remove("active");
+      }
+
+      selectedTask = null;
+
+      await loadTasks();
     } catch (error) {
       console.error("Task update error:", error);
 
@@ -1142,7 +1384,15 @@ if (markTaskBtn) {
   });
 }
 
-// ==================== DASHBOARD STATISTICS ====================
+/* =========================================================
+   LOAD TASKS
+========================================================= */
+
+loadTasks();
+
+/* =========================================================
+   FINAL DASHBOARD STATS
+========================================================= */
 
 async function loadDashboardStats() {
   try {
@@ -1152,10 +1402,12 @@ async function loadDashboardStats() {
       return;
     }
 
-    // ==================== ATTENDANCE ====================
+    /* -----------------------------------------------------
+       ATTENDANCE
+    ----------------------------------------------------- */
 
     const attendanceResponse = await fetch(
-      `http://localhost:5000/api/auth/attendance/${loggedInUser.id}`,
+      `${API_BASE}/attendance/${loggedInUser.id}`,
     );
 
     const attendanceData = await attendanceResponse.json();
@@ -1165,55 +1417,55 @@ async function loadDashboardStats() {
 
       const totalClasses = Number(attendanceData.totalClasses) || 0;
 
+      const minimumTarget = Number(attendanceData.minimumTarget) || 75;
+
       let percentage = 0;
 
       if (totalClasses > 0) {
         percentage = Math.round((attended / totalClasses) * 100);
       }
 
-      const dashboardAttendance = document.getElementById(
-        "dashboardAttendance",
-      );
+      /*
+        IMPORTANT:
+        Use querySelectorAll instead of
+        getElementById.
 
-      const dashboardAttendanceStatus = document.getElementById(
-        "dashboardAttendanceStatus",
-      );
+        If the HTML accidentally contains
+        duplicate dashboardAttendance IDs,
+        BOTH values will now update.
+      */
 
-      if (dashboardAttendance) {
-        dashboardAttendance.textContent = `${percentage}%`;
-      }
+      document.querySelectorAll("#dashboardAttendance").forEach((element) => {
+        element.textContent = `${percentage}%`;
+      });
 
-      if (dashboardAttendanceStatus) {
-        if (percentage >= Number(attendanceData.minimumTarget || 75)) {
-          dashboardAttendanceStatus.innerHTML = `
-            <i class="fa-solid fa-arrow-up"></i>
-            Good standing
-          `;
-        } else {
-          dashboardAttendanceStatus.innerHTML = `
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            Below target
-          `;
-        }
-      }
+      document
+        .querySelectorAll("#dashboardAttendanceStatus")
+        .forEach((element) => {
+          if (percentage >= minimumTarget) {
+            element.innerHTML = `
+                <i class="fa-solid fa-arrow-up"></i>
+                Good standing
+              `;
+          } else {
+            element.innerHTML = `
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                Below target
+              `;
+          }
+        });
     }
 
-    // ==================== TASKS ====================
+    /* -----------------------------------------------------
+       TASKS
+    ----------------------------------------------------- */
 
-    const tasksResponse = await fetch(
-      `http://localhost:5000/api/auth/tasks/${loggedInUser.id}`,
-    );
+    const tasksResponse = await fetch(`${API_BASE}/tasks/${loggedInUser.id}`);
 
     const tasks = await tasksResponse.json();
 
-    if (tasksResponse.ok) {
-      const pendingTasks = tasks.filter((task) => task.completed === false);
-
-      const dashboardTasks = document.getElementById("dashboardTasks");
-
-      if (dashboardTasks) {
-        dashboardTasks.textContent = pendingTasks.length;
-      }
+    if (tasksResponse.ok && Array.isArray(tasks)) {
+      updateDashboardTaskCount(tasks);
     }
 
     console.log("Dashboard statistics loaded successfully");
@@ -1223,443 +1475,3 @@ async function loadDashboardStats() {
 }
 
 loadDashboardStats();
-
-// ==================== SUBJECTS & NOTES STATISTICS ====================
-
-function loadSubjectsAndNotesStats() {
-  // ==================== SUBJECTS ====================
-
-  const subjectItems = document.querySelectorAll("#subjects .subject-card");
-
-  const dashboardSubjects = document.getElementById("dashboardSubjects");
-
-  if (dashboardSubjects) {
-    dashboardSubjects.textContent = subjectItems.length || 4;
-  }
-
-  // ==================== NOTES ====================
-
-  const noteItems = document.querySelectorAll("#notes .note-card");
-
-  const dashboardNotes = document.getElementById("dashboardNotes");
-
-  if (dashboardNotes) {
-    dashboardNotes.textContent = noteItems.length || 24;
-  }
-}
-
-loadSubjectsAndNotesStats();
-
-// ==================== NOTES BUTTONS ====================
-
-// ==================== NOTES MODAL ====================
-
-const notesModal = document.getElementById("notesModal");
-
-const closeNotesModal = document.getElementById("closeNotesModal");
-
-const notesModalTitle = document.getElementById("notesModalTitle");
-
-const notesModalText = document.getElementById("notesModalText");
-
-const notesContent = {
-  "Data Structures": `
-        <h3>Data Structures</h3>
-
-        <p>
-            Data structures are ways of organizing
-            and storing data so that it can be
-            accessed and modified efficiently.
-        </p>
-
-        <h4>Important Topics</h4>
-
-        <ul>
-            <li>Arrays</li>
-            <li>Linked Lists</li>
-            <li>Stacks</li>
-            <li>Queues</li>
-            <li>Trees</li>
-            <li>Graphs</li>
-            <li>Searching and Sorting</li>
-        </ul>
-    `,
-
-  Database: `
-        <h3>Database Management</h3>
-
-        <p>
-            A database is an organized collection
-            of data that can be stored, managed
-            and retrieved efficiently.
-        </p>
-
-        <h4>Important Topics</h4>
-
-        <ul>
-            <li>SQL</li>
-            <li>Tables</li>
-            <li>Primary Key</li>
-            <li>Foreign Key</li>
-            <li>Normalization</li>
-            <li>Relationships</li>
-            <li>CRUD Operations</li>
-        </ul>
-    `,
-
-  "Web Development": `
-        <h3>Web Development</h3>
-
-        <p>
-            Web development is the process of
-            creating websites and web applications.
-        </p>
-
-        <h4>Important Topics</h4>
-
-        <ul>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>JavaScript</li>
-            <li>DOM</li>
-            <li>Responsive Design</li>
-            <li>APIs</li>
-            <li>Frontend and Backend</li>
-        </ul>
-    `,
-};
-
-// OPEN NOTES MODAL
-
-document.addEventListener("click", function (event) {
-  const button = event.target.closest(".view-notes-btn");
-
-  if (!button) {
-    return;
-  }
-
-  const noteName = button.getAttribute("data-note");
-
-  if (!notesModal) {
-    return;
-  }
-
-  notesModalTitle.textContent = `${noteName} Notes`;
-
-  notesModalText.innerHTML =
-    notesContent[noteName] || "<p>No notes available.</p>";
-
-  notesModal.classList.add("active");
-});
-
-// CLOSE NOTES MODAL
-
-if (closeNotesModal) {
-  closeNotesModal.addEventListener("click", function () {
-    notesModal.classList.remove("active");
-  });
-}
-
-// ==================== SEARCH ====================
-
-// ==================== SMART SEARCH ====================
-
-const searchInput = document.getElementById("searchInput");
-
-const searchBox = document.getElementById("searchBox");
-
-const closeSearchBtn = document.getElementById("closeSearchBtn");
-
-const searchTargets = {
-  "data structures": "subjects",
-  database: "subjects",
-  "database management": "subjects",
-  "web development": "subjects",
-  "computer networks": "subjects",
-
-  notes: "notes",
-  "study notes": "notes",
-
-  attendance: "attendance",
-
-  tasks: "tasks",
-  "pending tasks": "tasks",
-
-  timetable: "timetable",
-
-  profile: "profile",
-  "student profile": "profile",
-
-  dashboard: "dashboard",
-  home: "home",
-};
-
-if (searchInput) {
-  searchInput.addEventListener("input", function () {
-    const searchText = this.value.trim().toLowerCase();
-
-    if (!searchText) {
-      return;
-    }
-
-    let targetSection = null;
-
-    // Exact / partial keyword matching
-
-    for (const keyword in searchTargets) {
-      if (keyword.includes(searchText)) {
-        targetSection = searchTargets[keyword];
-
-        break;
-      }
-    }
-
-    // Search section directly
-
-    if (!targetSection) {
-      const sections = document.querySelectorAll("section[id]");
-
-      sections.forEach((section) => {
-        if (targetSection) {
-          return;
-        }
-
-        const text = section.textContent.toLowerCase();
-
-        if (text.includes(searchText)) {
-          targetSection = section.id;
-        }
-      });
-    }
-
-    if (targetSection) {
-      const section = document.getElementById(targetSection);
-
-      if (section) {
-        section.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
-    }
-  });
-}
-
-// ==================== CLOSE SEARCH ====================
-
-if (closeSearchBtn) {
-  closeSearchBtn.addEventListener("click", function () {
-    if (searchInput) {
-      searchInput.value = "";
-    }
-
-    if (searchBox) {
-      searchBox.classList.remove("active");
-    }
-  });
-}
-
-/* =====================================================
-   SUBJECT DETAILS MODAL
-===================================================== */
-
-const subjectModal = document.getElementById("subjectModal");
-const closeSubjectModal = document.getElementById("closeSubjectModal");
-
-const modalSubjectName = document.getElementById("modalSubjectName");
-const modalTopics = document.getElementById("modalTopics");
-const modalDifficulty = document.getElementById("modalDifficulty");
-const progressBar = document.getElementById("progressBar");
-const progressText = document.getElementById("progressText");
-
-const subjectDetails = {
-  "Data Structures": {
-    topics: "Arrays, linked lists, stacks, queues, trees and graphs.",
-    difficulty: "Medium",
-    progress: 70,
-  },
-
-  "Database Management": {
-    topics: "SQL, tables, keys, normalization, joins and transactions.",
-    difficulty: "Medium",
-    progress: 65,
-  },
-
-  "Web Development": {
-    topics: "HTML, CSS, JavaScript, DOM, events and responsive design.",
-    difficulty: "Easy",
-    progress: 80,
-  },
-
-  "Computer Networks": {
-    topics: "OSI model, TCP/IP, IP addressing, routing and protocols.",
-    difficulty: "Medium",
-    progress: 60,
-  },
-};
-
-/* OPEN SUBJECT MODAL */
-
-document.addEventListener("click", function (event) {
-  const button = event.target.closest(".subject-btn");
-
-  if (!button) {
-    return;
-  }
-
-  const subjectName = button.getAttribute("data-subject");
-
-  const subject = subjectDetails[subjectName];
-
-  if (!subject || !subjectModal) {
-    return;
-  }
-
-  modalSubjectName.textContent = subjectName;
-
-  modalTopics.textContent = subject.topics;
-
-  modalDifficulty.textContent = subject.difficulty;
-
-  progressBar.style.width = `${subject.progress}%`;
-
-  progressText.textContent = `${subject.progress}% completed`;
-
-  subjectModal.classList.add("active");
-});
-
-/* CLOSE SUBJECT MODAL */
-
-if (closeSubjectModal) {
-  closeSubjectModal.addEventListener("click", function () {
-    subjectModal.classList.remove("active");
-  });
-}
-const closeNotesBtn = document.getElementById("closeNotesBtn");
-
-if (closeNotesBtn) {
-  closeNotesBtn.addEventListener("click", function () {
-    notesModal.classList.remove("active");
-  });
-}
-
-/* =====================================================
-   TIMETABLE DETAILS MODAL
-===================================================== */
-
-const timetableModal = document.getElementById("timetableModal");
-
-const closeTimetableModal = document.getElementById("closeTimetableModal");
-
-const timetableModalSubject = document.getElementById("timetableModalSubject");
-
-const timetableModalDay = document.getElementById("timetableModalDay");
-
-const timetableModalTime = document.getElementById("timetableModalTime");
-
-const timetableModalRoom = document.getElementById("timetableModalRoom");
-
-const timetableModalStatus = document.getElementById("timetableModalStatus");
-
-/* OPEN TIMETABLE MODAL */
-
-document.addEventListener("click", function (event) {
-  const timetableItem = event.target.closest(".timetable-item");
-
-  if (!timetableItem) {
-    return;
-  }
-
-  const subject = timetableItem.getAttribute("data-subject");
-
-  const day = timetableItem.getAttribute("data-day");
-
-  const time = timetableItem.getAttribute("data-time");
-
-  const room = timetableItem.getAttribute("data-room");
-
-  if (!timetableModal) {
-    return;
-  }
-
-  timetableModalSubject.textContent = subject || "Class Details";
-
-  timetableModalDay.textContent = day || "Day not available";
-
-  timetableModalTime.textContent = time || "Time not available";
-
-  timetableModalRoom.textContent = room || "Room 101";
-
-  timetableModalStatus.textContent = "Scheduled";
-
-  timetableModal.classList.add("active");
-});
-
-/* CLOSE TIMETABLE MODAL */
-
-if (closeTimetableModal) {
-  closeTimetableModal.addEventListener("click", function () {
-    timetableModal.classList.remove("active");
-  });
-}
-
-/* =====================================================
-   CONTACT FORM
-===================================================== */
-
-const contactForm = document.getElementById("contactForm");
-
-if (contactForm) {
-  contactForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    const name = document.getElementById("contactName").value.trim();
-
-    const email = document.getElementById("contactEmail").value.trim();
-
-    const subject = document.getElementById("contactSubject").value.trim();
-
-    const message = document.getElementById("contactMessage").value.trim();
-
-    if (!name || !email || !subject || !message) {
-      alert("Please fill in all fields.");
-
-      return;
-    }
-
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/messages", {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          subject: subject,
-          message: message,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.message || "Failed to send message.");
-
-        return;
-      }
-
-      alert("Your message has been sent successfully!");
-
-      contactForm.reset();
-
-      console.log("Contact message saved:", data.data);
-    } catch (error) {
-      console.error("Contact form error:", error);
-
-      alert("Cannot connect to server. Make sure the backend is running.");
-    }
-  });
-}

@@ -13,17 +13,20 @@ document
     message.style.color = "#2563eb";
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://student-portal-n9fs.onrender.com/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            password: password,
+          }),
         },
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          password: password,
-        }),
-      });
+      );
 
       const data = await response.json();
 
