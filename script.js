@@ -1,10 +1,10 @@
 /* =========================================================
    STUDENT PORTAL - MAIN JAVASCRIPT
    Backend:
-   https://student-portal-n9fs.onrender.com
+   https://student-portal-32te.vercel.app
 ========================================================= */
 
-const API_BASE = "https://student-portal-n9fs.onrender.com/api/auth";
+const API_BASE = "https://student-portal-32te.vercel.app/api/auth";
 
 /* =========================================================
    DOM READY
@@ -411,7 +411,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const response = await fetch(
-        `https://student-portal-n9fs.onrender.com/api/auth/attendance/${loggedInUser.id}`,
+        `https://student-portal-32te.vercel.app/api/auth/attendance/${loggedInUser.id}`,
       );
 
       const data = await response.json();

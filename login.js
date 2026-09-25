@@ -12,7 +12,7 @@ document
 
     try {
       const response = await fetch(
-        "https://student-portal-n9fs.onrender.com/api/auth/login",
+        "https://student-portal-32te.vercel.app/api/auth/login",
         {
           method: "POST",
           headers: {

@@ -14,7 +14,7 @@ document
 
     try {
       const response = await fetch(
-        "https://student-portal-n9fs.onrender.com/api/auth/register",
+        "https://student-portal-32te.vercel.app/api/auth/register",
         {
           method: "POST",
           headers: {
