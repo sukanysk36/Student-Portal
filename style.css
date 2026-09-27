@@ -1914,3 +1914,273 @@ body.dark-mode #logoutBtn:hover {
     }
 
 }
+
+/* =====================================================
+   SUBJECT DETAILS MODAL
+===================================================== */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 5000;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.subject-modal {
+    width: 100%;
+    max-width: 550px;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+
+    position: relative;
+
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+
+    animation: subjectModalPopup 0.25s ease;
+}
+
+@keyframes subjectModalPopup {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.subject-modal .modal-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+
+    width: 36px;
+    height: 36px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #f1f5f9;
+    color: #475569;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.subject-modal .modal-close:hover {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.subject-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    margin-bottom: 25px;
+    padding-right: 40px;
+}
+
+.subject-modal-header .modal-icon {
+    width: 55px;
+    height: 55px;
+
+    flex-shrink: 0;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+}
+
+.modal-label {
+    display: block;
+
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 1.3px;
+
+    margin-bottom: 5px;
+}
+
+.subject-modal h2 {
+    font-size: 25px;
+    color: #1e293b;
+}
+
+.modal-info-card {
+    display: flex;
+    gap: 15px;
+
+    padding: 18px;
+
+    margin-bottom: 15px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+}
+
+.modal-info-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-info-card span {
+    display: block;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    color: #64748b;
+
+    margin-bottom: 6px;
+}
+
+.modal-info-card p {
+    color: #334155;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.modal-progress {
+    margin-top: 20px;
+}
+
+.modal-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 8px;
+}
+
+.modal-progress-header span {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.modal-progress-header strong {
+    color: #2563eb;
+    font-size: 14px;
+}
+
+.modal-progress-bar {
+    width: 100%;
+    height: 10px;
+
+    background: #e2e8f0;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+.modal-progress-fill {
+    height: 100%;
+    width: 0;
+
+    background: #2563eb;
+
+    border-radius: 10px;
+
+    transition: width 0.5s ease;
+}
+
+.modal-done-btn {
+    width: 100%;
+
+    margin-top: 25px;
+
+    padding: 13px 20px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+.modal-done-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+/* DARK MODE */
+
+body.dark .modal-overlay {
+    background: rgba(2, 6, 23, 0.75);
+}
+
+body.dark .subject-modal {
+    background: #1e293b;
+    color: #e2e8f0;
+}
+
+body.dark .subject-modal h2 {
+    color: #f1f5f9;
+}
+
+body.dark .modal-info-card {
+    background: #0f172a;
+    border-color: #334155;
+}
+
+body.dark .modal-info-card p {
+    color: #cbd5e1;
+}
+
+body.dark .subject-modal .modal-close {
+    background: #334155;
+    color: #e2e8f0;
+}
+
+body.dark .subject-modal .modal-close:hover {
+    background: #2563eb;
+}

@@ -7,13 +7,59 @@
 const API_BASE = "https://student-portal-32te.vercel.app/api/auth";
 
 /* =========================================================
+   HELPER FUNCTIONS
+========================================================= */
+
+function getElement(id) {
+  return document.getElementById(id);
+}
+
+function getLoggedInUser() {
+  try {
+    return JSON.parse(localStorage.getItem("studentUser"));
+  } catch (error) {
+    console.error("User data error:", error);
+    return null;
+  }
+}
+
+function goToSection(sectionId) {
+  const section = getElement(sectionId);
+
+  if (section) {
+    section.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+}
+
+function escapeHTML(value) {
+  const div = document.createElement("div");
+  div.textContent = String(value ?? "");
+  return div.innerHTML;
+}
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeModal(modalId) {
+  const modal = getElement(modalId);
+
+  if (modal) {
+    modal.classList.remove("active");
+  }
+}
+
+/* =========================================================
    DOM READY
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-  /* =======================================================
-     LOGIN CHECK
-  ======================================================= */
+  /* =====================================================
+       LOGIN CHECK
+    ===================================================== */
 
   const currentUser = localStorage.getItem("studentUser");
 
@@ -22,36 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  /* =======================================================
-     HELPER FUNCTIONS
-  ======================================================= */
-
-  const getElement = (id) => {
-    return document.getElementById(id);
-  };
-
-  const goToSection = (sectionId) => {
-    const section = getElement(sectionId);
-
-    if (section) {
-      section.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  };
-
-  /* =======================================================
-     USER DATA
-  ======================================================= */
-
-  let loggedInUser = null;
-
-  try {
-    loggedInUser = JSON.parse(localStorage.getItem("studentUser"));
-  } catch (error) {
-    console.error("User data error:", error);
-  }
+  const loggedInUser = getLoggedInUser();
 
   if (!loggedInUser || !loggedInUser.id) {
     localStorage.clear();
@@ -59,25 +76,32 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  /* =======================================================
-     ELEMENTS
-  ======================================================= */
+  /* =====================================================
+       ELEMENTS
+    ===================================================== */
 
   const logoBtn = getElement("logoBtn");
+
   const footerLogoBtn = getElement("footerLogoBtn");
 
   const exploreBtn = getElement("exploreBtn");
+
   const profileHeroBtn = getElement("profileHeroBtn");
 
   const menuBtn = getElement("menuBtn");
+
   const navLinks = getElement("navLinks");
 
   const themeBtn = getElement("themeBtn");
+
   const themeIcon = getElement("themeIcon");
 
   const searchBtn = getElement("searchBtn");
+
   const searchBox = getElement("searchBox");
+
   const searchInput = getElement("searchInput");
+
   const closeSearchBtn = getElement("closeSearchBtn");
 
   const notificationBtn = getElement("notificationBtn");
@@ -92,9 +116,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const topBtn = getElement("topBtn");
 
-  /* =======================================================
-     LOGO
-  ======================================================= */
+  /* =====================================================
+       LOGO
+    ===================================================== */
 
   if (logoBtn) {
     logoBtn.addEventListener("click", () => {
@@ -109,9 +133,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =======================================================
-     HERO BUTTONS
-  ======================================================= */
+  /* =====================================================
+       HERO BUTTONS
+    ===================================================== */
 
   if (exploreBtn) {
     exploreBtn.addEventListener("click", () => {
@@ -121,13 +145,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (profileHeroBtn) {
     profileHeroBtn.addEventListener("click", () => {
-      goToSection("profile");
+      openProfileModal();
     });
   }
 
-  /* =======================================================
-     MOBILE MENU
-  ======================================================= */
+  /* =====================================================
+       MOBILE MENU
+    ===================================================== */
 
   function closeMobileMenu() {
     if (navLinks) {
@@ -139,6 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (icon) {
         icon.classList.remove("fa-xmark");
+
         icon.classList.add("fa-bars");
       }
 
@@ -170,9 +195,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =======================================================
-     DARK / LIGHT MODE
-  ======================================================= */
+  /* =====================================================
+       DARK / LIGHT MODE
+    ===================================================== */
 
   const savedTheme = localStorage.getItem("studentPortalTheme");
 
@@ -210,9 +235,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =======================================================
-     SEARCH
-  ======================================================= */
+  /* =====================================================
+       SEARCH
+    ===================================================== */
 
   function closeSearch() {
     if (searchBox) {
@@ -314,15 +339,17 @@ document.addEventListener("DOMContentLoaded", () => {
         goToSection(result.target);
       } else {
         alert(
-          "No matching section found.\n\nTry: subjects, notes, profile, timetable, attendance, tasks or dashboard.",
+          "No matching section found.\n\n" +
+            "Try: subjects, notes, profile, " +
+            "timetable, attendance, tasks or dashboard.",
         );
       }
     });
   }
 
-  /* =======================================================
-     NOTIFICATIONS
-  ======================================================= */
+  /* =====================================================
+       NOTIFICATIONS
+    ===================================================== */
 
   if (notificationBtn && notificationPanel) {
     notificationBtn.addEventListener("click", (event) => {
@@ -336,18 +363,20 @@ document.addEventListener("DOMContentLoaded", () => {
     clearNotifications.addEventListener("click", () => {
       if (notificationList) {
         notificationList.innerHTML = `
-            <div class="notification-empty">
-              <i class="fa-solid fa-circle-check"></i>
+              <div class="notification-empty">
 
-              <strong>
-                All caught up!
-              </strong>
+                <i class="fa-solid fa-circle-check"></i>
 
-              <small>
-                You have no new notifications.
-              </small>
-            </div>
-          `;
+                <strong>
+                  All caught up!
+                </strong>
+
+                <small>
+                  You have no new notifications.
+                </small>
+
+              </div>
+            `;
       }
 
       if (notificationCount) {
@@ -376,55 +405,32 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =======================================================
-     DASHBOARD QUICK ACTIONS
-  ======================================================= */
-
-  document.querySelectorAll(".action-card, .stat-card").forEach((card) => {
-    card.addEventListener("click", () => {
-      const target = card.dataset.target;
-
-      if (!target) {
-        return;
-      }
-
-      if (card.classList.contains("action-card") && target === "profile") {
-        openProfileModal();
-
-        return;
-      }
-
-      goToSection(target);
-    });
-  });
-
-  /* =======================================================
-     LOAD ATTENDANCE
-  ======================================================= */
+  /* =====================================================
+       ATTENDANCE
+    ===================================================== */
 
   async function loadAttendance() {
     try {
-      const loggedInUser = JSON.parse(localStorage.getItem("studentUser"));
+      const user = getLoggedInUser();
 
-      if (!loggedInUser || !loggedInUser.id) {
+      if (!user || !user.id) {
         return;
       }
 
-      const response = await fetch(
-        `https://student-portal-32te.vercel.app/api/auth/attendance/${loggedInUser.id}`,
-      );
+      const response = await fetch(`${API_BASE}/attendance/${user.id}`);
 
       const data = await response.json();
 
-      console.log("Attendance API data:", data);
-
       if (!response.ok) {
         console.error("Failed to load attendance:", data.message);
+
         return;
       }
 
       const attended = Number(data.attended) || 0;
+
       const totalClasses = Number(data.totalClasses) || 0;
+
       const minimumTarget = Number(data.minimumTarget) || 75;
 
       let percentage = 0;
@@ -435,11 +441,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const missed = Math.max(totalClasses - attended, 0);
 
-      const overallAttendance = document.getElementById("overallAttendance");
-      const classesAttended = document.getElementById("classesAttended");
-      const classesMissed = document.getElementById("classesMissed");
-      const minimumTargetElement = document.getElementById("minimumTarget");
-      const attendanceStatus = document.getElementById("attendanceStatus");
+      const overallAttendance = getElement("overallAttendance");
+
+      const classesAttended = getElement("classesAttended");
+
+      const classesMissed = getElement("classesMissed");
+
+      const minimumTargetElement = getElement("minimumTarget");
+
+      const attendanceStatus = getElement("attendanceStatus");
 
       if (overallAttendance) {
         overallAttendance.textContent = `${percentage}%`;
@@ -463,23 +473,16 @@ document.addEventListener("DOMContentLoaded", () => {
             ? "Good standing"
             : "Below minimum target";
       }
-
-      console.log(
-        `Attendance updated: ${attended}/${totalClasses} = ${percentage}%`,
-      );
     } catch (error) {
       console.error("Attendance loading error:", error);
     }
   }
-  /* =======================================================
-     LOAD ATTENDANCE ONCE
-  ======================================================= */
 
   loadAttendance();
 
-  /* =======================================================
-     LOAD SUBJECTS / NOTES COUNTS
-  ======================================================= */
+  /* =====================================================
+       SUBJECT / NOTES COUNTS
+    ===================================================== */
 
   function loadSubjectsAndNotesStats() {
     const subjectItems = document.querySelectorAll("#subjects .subject-card");
@@ -501,11 +504,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadSubjectsAndNotesStats();
 
-  /* =======================================================
-     SUBJECT DETAILS
-  ======================================================= */
-
-  const subjectModal = getElement("subjectModal");
+  /* =====================================================
+       SUBJECT DETAILS
+    ===================================================== */
 
   const subjectDetails = {
     "Data Structures": {
@@ -543,121 +544,191 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   };
 
-  document.querySelectorAll(".subject-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      const subjectName = button.dataset.subject;
+  /* =====================================================
+       SUBJECT MODAL
+       EVENT DELEGATION
+       This fixes View Details buttons reliably.
+    ===================================================== */
 
-      const subject = subjectDetails[subjectName];
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest(".subject-btn");
 
-      if (!subject || !subjectModal) {
-        return;
-      }
+    if (!button) {
+      return;
+    }
 
-      const modalSubjectName = getElement("modalSubjectName");
+    event.preventDefault();
 
-      const modalTopics = getElement("modalTopics");
+    const subjectName = button.dataset.subject;
 
-      const modalDifficulty = getElement("modalDifficulty");
+    const subject = subjectDetails[subjectName];
 
-      const progressBar = getElement("progressBar");
+    const subjectModal = getElement("subjectModal");
 
-      const progressText = getElement("progressText");
+    if (!subject || !subjectModal) {
+      console.error("Subject modal or subject data not found:", subjectName);
 
-      if (modalSubjectName) {
-        modalSubjectName.textContent = subjectName;
-      }
+      return;
+    }
 
-      if (modalTopics) {
-        modalTopics.textContent = subject.topics;
-      }
+    const modalSubjectName = getElement("modalSubjectName");
 
-      if (modalDifficulty) {
-        modalDifficulty.textContent = subject.difficulty;
-      }
+    const modalTopics = getElement("modalTopics");
 
-      if (progressBar) {
-        progressBar.style.width = `${subject.progress}%`;
-      }
+    const modalDifficulty = getElement("modalDifficulty");
 
-      if (progressText) {
-        progressText.textContent = `${subject.progress}% completed`;
-      }
+    const progressBar = getElement("progressBar");
 
-      subjectModal.classList.add("active");
-    });
+    const progressText = getElement("progressText");
+
+    if (modalSubjectName) {
+      modalSubjectName.textContent = subjectName;
+    }
+
+    if (modalTopics) {
+      modalTopics.textContent = subject.topics;
+    }
+
+    if (modalDifficulty) {
+      modalDifficulty.textContent = subject.difficulty;
+    }
+
+    if (progressBar) {
+      progressBar.style.width = `${subject.progress}%`;
+
+      progressBar.setAttribute("aria-valuenow", subject.progress);
+    }
+
+    if (progressText) {
+      progressText.textContent = `${subject.progress}% completed`;
+    }
+
+    subjectModal.classList.add("active");
+
+    document.body.classList.add("modal-open");
   });
 
-  /* =======================================================
-     NOTES
-  ======================================================= */
-
-  const notesModal = getElement("notesModal");
+  /* =====================================================
+       NOTES
+    ===================================================== */
 
   const notesContent = {
     "Data Structures": `
-      <h3>Data Structures</h3>
 
-      <p>
-        Data structures are ways of organizing
-        and storing data so that it can be
-        accessed and modified efficiently.
-      </p>
+        <h3>Data Structures</h3>
 
-      <h4>Important Topics</h4>
+        <p>
+          Data structures are ways of organizing
+          and storing data so that it can be
+          accessed and modified efficiently.
+        </p>
 
-      <ul>
-        <li>Arrays</li>
-        <li>Linked Lists</li>
-        <li>Stacks</li>
-        <li>Queues</li>
-        <li>Trees</li>
-        <li>Graphs</li>
-        <li>Searching and Sorting</li>
-      </ul>
-    `,
+        <h4>Important Topics</h4>
+
+        <ul>
+          <li>Arrays</li>
+          <li>Linked Lists</li>
+          <li>Stacks</li>
+          <li>Queues</li>
+          <li>Trees</li>
+          <li>Graphs</li>
+          <li>Searching and Sorting</li>
+        </ul>
+
+      `,
 
     Database: `
-      <h3>Database Management</h3>
 
-      <p>
-        A database is an organized collection
-        of data that can be stored, managed
-        and retrieved efficiently.
-      </p>
+        <h3>Database Management</h3>
 
-      <h4>Important Topics</h4>
+        <p>
+          A database is an organized collection
+          of data that can be stored, managed
+          and retrieved efficiently.
+        </p>
 
-      <ul>
-        <li>SQL</li>
-        <li>Tables</li>
-        <li>Primary Key</li>
-        <li>Foreign Key</li>
-        <li>Normalization</li>
-        <li>Relationships</li>
-        <li>CRUD Operations</li>
-      </ul>
-    `,
+        <h4>Important Topics</h4>
+
+        <ul>
+          <li>SQL</li>
+          <li>Tables</li>
+          <li>Primary Key</li>
+          <li>Foreign Key</li>
+          <li>Normalization</li>
+          <li>Relationships</li>
+          <li>CRUD Operations</li>
+        </ul>
+
+      `,
+
+    "Database Management": `
+
+        <h3>Database Management</h3>
+
+        <p>
+          A database is an organized collection
+          of data that can be stored, managed
+          and retrieved efficiently.
+        </p>
+
+        <h4>Important Topics</h4>
+
+        <ul>
+          <li>SQL</li>
+          <li>Tables</li>
+          <li>Primary Key</li>
+          <li>Foreign Key</li>
+          <li>Normalization</li>
+          <li>Relationships</li>
+          <li>CRUD Operations</li>
+        </ul>
+
+      `,
 
     "Web Development": `
-      <h3>Web Development</h3>
 
-      <p>
-        Web development is the process of
-        creating websites and web applications.
-      </p>
+        <h3>Web Development</h3>
 
-      <h4>Important Topics</h4>
+        <p>
+          Web development is the process of
+          creating websites and web applications.
+        </p>
 
-      <ul>
-        <li>HTML</li>
-        <li>CSS</li>
-        <li>JavaScript</li>
-        <li>DOM</li>
-        <li>Responsive Design</li>
-        <li>APIs</li>
-        <li>Frontend and Backend</li>
-      </ul>
-    `,
+        <h4>Important Topics</h4>
+
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>JavaScript</li>
+          <li>DOM</li>
+          <li>Responsive Design</li>
+          <li>APIs</li>
+          <li>Frontend and Backend</li>
+        </ul>
+
+      `,
+
+    "Computer Networks": `
+
+        <h3>Computer Networks</h3>
+
+        <p>
+          Computer networks allow devices
+          to communicate and exchange data.
+        </p>
+
+        <h4>Important Topics</h4>
+
+        <ul>
+          <li>OSI Model</li>
+          <li>TCP/IP</li>
+          <li>IP Addressing</li>
+          <li>Routing</li>
+          <li>DNS</li>
+          <li>Network Protocols</li>
+        </ul>
+
+      `,
   };
 
   document.addEventListener("click", (event) => {
@@ -666,6 +737,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!button) {
       return;
     }
+
+    event.preventDefault();
+
+    const notesModal = getElement("notesModal");
 
     if (!notesModal) {
       return;
@@ -686,11 +761,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     notesModal.classList.add("active");
+
+    document.body.classList.add("modal-open");
   });
 
-  /* =======================================================
-     PROFILE
-  ======================================================= */
+  /* =====================================================
+       PROFILE
+    ===================================================== */
 
   const profileModal = getElement("profileModal");
 
@@ -728,6 +805,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     profileModal.classList.add("active");
+
+    document.body.classList.add("modal-open");
 
     const firstInput = getElement("profileNameInput");
 
@@ -813,7 +892,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         loadProfile();
 
-        profileModal?.classList.remove("active");
+        closeModal("profileModal");
+
+        document.body.classList.remove("modal-open");
 
         alert("Profile updated successfully!");
       } catch (error) {
@@ -824,9 +905,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =======================================================
-     LOAD PROFILE
-  ======================================================= */
+  /* =====================================================
+       LOAD PROFILE
+    ===================================================== */
 
   function loadProfile() {
     profileFields.forEach(([displayId, , storageKey]) => {
@@ -846,9 +927,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadProfile();
 
-  /* =======================================================
-     HELP MODAL
-  ======================================================= */
+  /* =====================================================
+       HELP MODAL
+    ===================================================== */
 
   const helpModal = getElement("helpModal");
 
@@ -857,12 +938,14 @@ document.addEventListener("DOMContentLoaded", () => {
   if (helpBtn && helpModal) {
     helpBtn.addEventListener("click", () => {
       helpModal.classList.add("active");
+
+      document.body.classList.add("modal-open");
     });
   }
 
-  /* =======================================================
-     TIMETABLE MODAL
-  ======================================================= */
+  /* =====================================================
+       TIMETABLE
+    ===================================================== */
 
   const timetableModal = getElement("timetableModal");
 
@@ -916,11 +999,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     timetableModal.classList.add("active");
+
+    document.body.classList.add("modal-open");
   });
 
-  /* =======================================================
-     CONTACT FORM
-  ======================================================= */
+  /* =====================================================
+       CONTACT FORM
+    ===================================================== */
 
   const contactForm = getElement("contactForm");
 
@@ -969,8 +1054,6 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Your message has been sent successfully!");
 
         contactForm.reset();
-
-        console.log("Contact message saved:", data.data);
       } catch (error) {
         console.error("Contact form error:", error);
 
@@ -979,9 +1062,31 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =======================================================
-     CLOSE MODALS
-  ======================================================= */
+  /* =====================================================
+       DASHBOARD QUICK ACTIONS
+    ===================================================== */
+
+  document.querySelectorAll(".action-card, .stat-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      const target = card.dataset.target;
+
+      if (!target) {
+        return;
+      }
+
+      if (card.classList.contains("action-card") && target === "profile") {
+        openProfileModal();
+
+        return;
+      }
+
+      goToSection(target);
+    });
+  });
+
+  /* =====================================================
+       CLOSE MODALS
+    ===================================================== */
 
   const modalIds = [
     "subjectModal",
@@ -997,16 +1102,10 @@ document.addEventListener("DOMContentLoaded", () => {
     "timetableModal",
   ];
 
-  function closeModalById(id) {
-    const modal = getElement(id);
-
-    if (modal) {
-      modal.classList.remove("active");
-    }
-  }
-
   const closeButtonMap = {
     closeSubjectModal: "subjectModal",
+
+    subjectModalDone: "subjectModal",
 
     closeNotesModal: "notesModal",
 
@@ -1030,14 +1129,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (button) {
       button.addEventListener("click", () => {
-        closeModalById(modalId);
+        closeModal(modalId);
+
+        document.body.classList.remove("modal-open");
       });
     }
   });
 
-  /* =======================================================
-     OUTSIDE MODAL CLICK
-  ======================================================= */
+  /* =====================================================
+       OUTSIDE MODAL CLICK
+    ===================================================== */
 
   modalIds.forEach((modalId) => {
     const modal = getElement(modalId);
@@ -1049,20 +1150,24 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.addEventListener("click", (event) => {
       if (event.target === modal) {
         modal.classList.remove("active");
+
+        document.body.classList.remove("modal-open");
       }
     });
   });
 
-  /* =======================================================
-     ESC KEY
-  ======================================================= */
+  /* =====================================================
+       ESC KEY
+    ===================================================== */
 
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") {
       return;
     }
 
-    modalIds.forEach(closeModalById);
+    modalIds.forEach((modalId) => {
+      closeModal(modalId);
+    });
 
     closeSearch();
 
@@ -1071,11 +1176,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     closeMobileMenu();
+
+    document.body.classList.remove("modal-open");
   });
 
-  /* =======================================================
-     BACK TO TOP
-  ======================================================= */
+  /* =====================================================
+       BACK TO TOP
+    ===================================================== */
 
   window.addEventListener("scroll", () => {
     if (topBtn) {
@@ -1092,9 +1199,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =======================================================
-     INITIAL MESSAGE
-  ======================================================= */
+  /* =====================================================
+       INITIAL MESSAGE
+    ===================================================== */
 
   console.log("Student Portal JavaScript loaded successfully.");
 });
@@ -1124,14 +1231,14 @@ if (logoutBtn) {
 let selectedTask = null;
 
 /* =========================================================
-   LOAD TASKS FROM MONGODB
+   LOAD TASKS
 ========================================================= */
 
 async function loadTasks() {
   try {
-    const loggedInUser = JSON.parse(localStorage.getItem("studentUser"));
+    const user = getLoggedInUser();
 
-    if (!loggedInUser || !loggedInUser.id) {
+    if (!user || !user.id) {
       return;
     }
 
@@ -1141,7 +1248,7 @@ async function loadTasks() {
       return;
     }
 
-    const response = await fetch(`${API_BASE}/tasks/${loggedInUser.id}`);
+    const response = await fetch(`${API_BASE}/tasks/${user.id}`);
 
     const tasks = await response.json();
 
@@ -1151,13 +1258,13 @@ async function loadTasks() {
       return;
     }
 
-    taskList.innerHTML = "";
-
     if (!Array.isArray(tasks)) {
       console.error("Invalid task data.");
 
       return;
     }
+
+    taskList.innerHTML = "";
 
     if (tasks.length === 0) {
       taskList.innerHTML = `
@@ -1182,9 +1289,9 @@ async function loadTasks() {
         taskButton.classList.add("completed");
       }
 
-      taskButton.dataset.task = task.title;
+      taskButton.dataset.task = task.title || "";
 
-      taskButton.dataset.id = task._id;
+      taskButton.dataset.id = task._id || "";
 
       taskButton.innerHTML = `
 
@@ -1220,27 +1327,17 @@ async function loadTasks() {
 }
 
 /* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHTML(value) {
-  const div = document.createElement("div");
-
-  div.textContent = String(value);
-
-  return div.innerHTML;
-}
-
-/* =========================================================
    DASHBOARD TASK COUNT
 ========================================================= */
 
 function updateDashboardTaskCount(tasks) {
+  if (!Array.isArray(tasks)) {
+    return;
+  }
+
   const pendingTasks = tasks.filter((task) => task.completed !== true);
 
-  const dashboardTasks = document.querySelectorAll("#dashboardTasks");
-
-  dashboardTasks.forEach((element) => {
+  document.querySelectorAll("#dashboardTasks").forEach((element) => {
     element.textContent = pendingTasks.length;
   });
 }
@@ -1258,14 +1355,14 @@ document.addEventListener("click", async (event) => {
 
   const taskId = taskButton.dataset.id;
 
-  const loggedInUser = JSON.parse(localStorage.getItem("studentUser"));
+  const user = getLoggedInUser();
 
-  if (!loggedInUser || !loggedInUser.id || !taskId) {
+  if (!user || !user.id || !taskId) {
     return;
   }
 
   try {
-    const response = await fetch(`${API_BASE}/tasks/${loggedInUser.id}`);
+    const response = await fetch(`${API_BASE}/tasks/${user.id}`);
 
     const tasks = await response.json();
 
@@ -1279,13 +1376,13 @@ document.addEventListener("click", async (event) => {
       return;
     }
 
-    const taskModal = document.getElementById("taskModal");
+    const taskModal = getElement("taskModal");
 
-    const taskModalTitle = document.getElementById("taskModalTitle");
+    const taskModalTitle = getElement("taskModalTitle");
 
-    const taskModalText = document.getElementById("taskModalText");
+    const taskModalText = getElement("taskModalText");
 
-    const markTaskBtn = document.getElementById("markTaskBtn");
+    const markTaskBtn = getElement("markTaskBtn");
 
     if (taskModalTitle) {
       taskModalTitle.textContent = selectedTask.title || "Task";
@@ -1316,6 +1413,8 @@ document.addEventListener("click", async (event) => {
 
     if (taskModal) {
       taskModal.classList.add("active");
+
+      document.body.classList.add("modal-open");
     }
   } catch (error) {
     console.error("Task modal error:", error);
@@ -1326,63 +1425,65 @@ document.addEventListener("click", async (event) => {
    MARK TASK COMPLETED
 ========================================================= */
 
-const markTaskBtn = document.getElementById("markTaskBtn");
+document.addEventListener("click", async (event) => {
+  const button = event.target.closest("#markTaskBtn");
 
-if (markTaskBtn) {
-  markTaskBtn.addEventListener("click", async () => {
-    if (!selectedTask) {
+  if (!button) {
+    return;
+  }
+
+  if (!selectedTask) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/tasks/${selectedTask._id}`, {
+      method: "PUT",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        title: selectedTask.title,
+
+        description: selectedTask.description,
+
+        dueDate: selectedTask.dueDate,
+
+        completed: true,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Could not update task.");
+
       return;
     }
 
-    try {
-      const response = await fetch(`${API_BASE}/tasks/${selectedTask._id}`, {
-        method: "PUT",
+    button.textContent = "Completed ✓";
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+    button.disabled = true;
 
-        body: JSON.stringify({
-          title: selectedTask.title,
+    alert("Task marked as completed!");
 
-          description: selectedTask.description,
+    closeModal("taskModal");
 
-          dueDate: selectedTask.dueDate,
+    document.body.classList.remove("modal-open");
 
-          completed: true,
-        }),
-      });
+    selectedTask = null;
 
-      const data = await response.json();
+    await loadTasks();
 
-      if (!response.ok) {
-        alert(data.message || "Could not update task.");
+    await loadDashboardStats();
+  } catch (error) {
+    console.error("Task update error:", error);
 
-        return;
-      }
-
-      markTaskBtn.textContent = "Completed ✓";
-
-      markTaskBtn.disabled = true;
-
-      alert("Task marked as completed!");
-
-      const taskModal = document.getElementById("taskModal");
-
-      if (taskModal) {
-        taskModal.classList.remove("active");
-      }
-
-      selectedTask = null;
-
-      await loadTasks();
-    } catch (error) {
-      console.error("Task update error:", error);
-
-      alert("Cannot connect to server.");
-    }
-  });
-}
+    alert("Cannot connect to server.");
+  }
+});
 
 /* =========================================================
    LOAD TASKS
@@ -1391,24 +1492,22 @@ if (markTaskBtn) {
 loadTasks();
 
 /* =========================================================
-   FINAL DASHBOARD STATS
+   DASHBOARD STATISTICS
 ========================================================= */
 
 async function loadDashboardStats() {
   try {
-    const loggedInUser = JSON.parse(localStorage.getItem("studentUser"));
+    const user = getLoggedInUser();
 
-    if (!loggedInUser || !loggedInUser.id) {
+    if (!user || !user.id) {
       return;
     }
 
-    /* -----------------------------------------------------
+    /* =====================================================
        ATTENDANCE
-    ----------------------------------------------------- */
+    ===================================================== */
 
-    const attendanceResponse = await fetch(
-      `${API_BASE}/attendance/${loggedInUser.id}`,
-    );
+    const attendanceResponse = await fetch(`${API_BASE}/attendance/${user.id}`);
 
     const attendanceData = await attendanceResponse.json();
 
@@ -1424,16 +1523,6 @@ async function loadDashboardStats() {
       if (totalClasses > 0) {
         percentage = Math.round((attended / totalClasses) * 100);
       }
-
-      /*
-        IMPORTANT:
-        Use querySelectorAll instead of
-        getElementById.
-
-        If the HTML accidentally contains
-        duplicate dashboardAttendance IDs,
-        BOTH values will now update.
-      */
 
       document.querySelectorAll("#dashboardAttendance").forEach((element) => {
         element.textContent = `${percentage}%`;
@@ -1456,11 +1545,11 @@ async function loadDashboardStats() {
         });
     }
 
-    /* -----------------------------------------------------
+    /* =====================================================
        TASKS
-    ----------------------------------------------------- */
+    ===================================================== */
 
-    const tasksResponse = await fetch(`${API_BASE}/tasks/${loggedInUser.id}`);
+    const tasksResponse = await fetch(`${API_BASE}/tasks/${user.id}`);
 
     const tasks = await tasksResponse.json();
 
